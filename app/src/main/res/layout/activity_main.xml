@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activites.MainActivity"
+    android:background="#131313">
+
+   <RelativeLayout
+       android:id="@+id/rlQuickCart"
+       android:layout_width="match_parent"
+       android:layout_height="250dp"
+       android:background="#131313">
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/logo_color"/>
+
+   </RelativeLayout>
+
+   <EditText
+       android:id="@+id/edtMobileNumber"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:padding="10dp"
+       android:ems="18"
+       android:hint="Enter Mobile Number"
+       android:inputType="number"
+       android:maxLength="10"
+       android:textColorHint="#949494"
+       android:textColor="@color/white"
+       android:background="@drawable/edt_bg"
+       android:layout_below="@id/rlQuickCart"
+       android:layout_marginTop="95dp"
+       android:layout_centerHorizontal="true"/>
+
+   <Button
+      android:id="@+id/btnContinue"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+      android:layout_below="@id/edtMobileNumber"
+      android:layout_margin="15dp"
+      android:text="Continue"
+      android:textStyle="bold"
+      android:textColor="@color/black"
+       android:background="@drawable/button_bg"/>
+
+   <View
+       android:layout_below="@id/btnContinue"
+       android:layout_marginTop="25dp"
+       android:layout_width="160dp"
+       android:layout_height="2dp"
+       android:background="#696969"
+       android:layout_marginLeft="20dp"/>
+
+   <View
+       android:layout_below="@id/btnContinue"
+       android:layout_marginTop="25dp"
+       android:layout_width="160dp"
+       android:layout_height="2dp"
+       android:background="#696969"
+       android:layout_alignParentRight="true"
+       android:layout_marginRight="20dp"/>
+
+   <TextView
+       android:id="@+id/tvOr"
+      android:layout_below="@id/btnContinue"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+      android:text="or"
+       android:layout_marginTop="10dp"
+      android:layout_centerHorizontal="true"
+      android:textColor="#696969"
+       android:textStyle="bold"
+       android:textSize="20sp"/>
+
+
+
+   <Button
+       android:id="@+id/btnGoogle"
+       android:layout_width="280dp"
+       android:layout_height="50dp"
+       android:layout_centerHorizontal="true"
+       android:layout_below="@id/tvOr"
+       android:background="@drawable/sign_up_button_bg"
+       android:layout_margin="20dp"
+       android:padding="10dp"
+       android:text="Continue with Google"
+       android:textColor="@color/white"
+       android:drawableStart="@drawable/google_icon_logo_svgrepo_com"/>
+
+   <Button
+       android:id="@+id/btnFacebook"
+       android:layout_width="280dp"
+       android:layout_height="50dp"
+       android:layout_centerHorizontal="true"
+       android:layout_below="@id/btnGoogle"
+       android:background="@drawable/sign_up_button_bg"
+       android:layout_margin="00dp"
+       android:padding="10dp"
+       android:text="Continue with Facebook"
+       android:textColor="@color/white"
+       android:drawableStart="@drawable/facebook_svgrepo_com__1_"/>
+
+</RelativeLayout>
