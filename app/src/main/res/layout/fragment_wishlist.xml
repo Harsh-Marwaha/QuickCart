@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activites.Fragments.WishlistFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llHead"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/Grey"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/Grey"
+                android:layout_gravity="center"
+                android:text="Wishlist"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="25dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/wishlist_bg">
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:background="#D9D9D9">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/t_shirt"
+                        android:background="@color/white"
+                        android:layout_margin="10dp" />
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/watch"
+                        android:background="@color/white"
+                        android:layout_margin="10dp" />
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/shoes"
+                        android:background="@color/white"
+                        android:layout_margin="10dp" />
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/monitor"
+                        android:background="@color/white"
+                        android:layout_margin="10dp" />
+
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/washing_machine"
+                        android:background="@color/white"
+                        android:layout_margin="10dp" />
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/tvWishlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/horizontalScrollView"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="My Wishlist"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/ivPrivate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_lock_24"
+                android:layout_below="@id/tvWishlist"
+                android:layout_margin="5dp"
+                app:tint="#979797" />
+
+            <TextView
+                android:id="@+id/tvPrivate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Private"
+                android:textColor="#979797"
+                android:layout_below="@id/tvWishlist"
+                android:layout_margin="2dp"
+                android:layout_toRightOf="@id/ivPrivate"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvdot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="."
+                android:textColor="#979797"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="7dp"
+                android:textSize="18sp"
+                android:layout_toRightOf="@id/tvPrivate"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5 items"
+                android:textColor="#979797"
+                android:layout_below="@id/tvWishlist"
+                android:layout_margin="2dp"
+                android:layout_toRightOf="@id/tvdot"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

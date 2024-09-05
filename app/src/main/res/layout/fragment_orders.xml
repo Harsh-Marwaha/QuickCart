@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activites.Fragments.OrdersFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llHead"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/Grey"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo_color"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/Grey"
+                android:layout_gravity="center"
+                android:text="My Orders"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="25dp"
+                />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+                    <ImageView
+                        android:id="@+id/imgTshirt"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/t_shirt"/>
+                    <TextView
+                        android:id="@+id/statusTshirt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dilevered on May 10"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_toRightOf="@id/imgTshirt"
+                        android:layout_margin="15dp"/>
+
+                    <TextView
+                        android:id="@+id/descriptionTshirt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This classic SELECTED Crew Neck T-Shirt is the perfect addition to any wardrobe. Crafted from pre-shrunk knitted fabric, this timeless style has a regular fit and short sleeves."
+                        android:layout_below="@id/statusTshirt"
+                        android:layout_toRightOf="@id/imgTshirt"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_margin="15dp"/>
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/rating"
+                        android:layout_below="@id/descriptionTshirt"
+                        android:layout_toRightOf="@id/imgTshirt"
+                        android:layout_margin="15dp"
+                        android:scaleType="centerCrop"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".5dp"
+                    android:background="@color/Grey"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+                    <ImageView
+                        android:id="@+id/imgWashingMachine"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/washing_machine"/>
+                    <TextView
+                        android:id="@+id/statusWashingMachine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Refund Completed"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_toRightOf="@id/imgWashingMachine"
+                        android:layout_margin="15dp"/>
+
+                    <TextView
+                        android:id="@+id/descriptionWashingMachine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This classic SELECTED Crew Neck T-Shirt is the perfect addition to any wardrobe. Crafted from pre-shrunk knitted fabric, this timeless style has a regular fit and short sleeves."
+                        android:layout_below="@id/statusWashingMachine"
+                        android:layout_toRightOf="@id/imgWashingMachine"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_margin="15dp"/>
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/rating"
+                        android:layout_below="@id/descriptionWashingMachine"
+                        android:layout_toRightOf="@id/imgWashingMachine"
+                        android:layout_margin="15dp"
+                        android:scaleType="centerCrop"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".5dp"
+                    android:background="@color/Grey"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+                    <ImageView
+                        android:id="@+id/imgWatch"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/watch"/>
+                    <TextView
+                        android:id="@+id/statusWatch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dilevered on April 18"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_toRightOf="@id/imgWatch"
+                        android:layout_margin="15dp"/>
+
+                    <TextView
+                        android:id="@+id/descriptionWatch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This classic SELECTED Crew Neck T-Shirt is the perfect addition to any wardrobe. Crafted from pre-shrunk knitted fabric, this timeless style has a regular fit and short sleeves."
+                        android:layout_below="@id/statusWatch"
+                        android:layout_toRightOf="@id/imgWatch"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_margin="15dp"/>
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/rating"
+                        android:layout_below="@id/descriptionWatch"
+                        android:layout_toRightOf="@id/imgWatch"
+                        android:layout_margin="15dp"
+                        android:scaleType="centerCrop"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".5dp"
+                    android:background="@color/Grey"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+                    <ImageView
+                        android:id="@+id/imgShoes"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/shoes"/>
+                    <TextView
+                        android:id="@+id/statusShoes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dilevered on April 8"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_toRightOf="@id/imgShoes"
+                        android:layout_margin="15dp"/>
+
+                    <TextView
+                        android:id="@+id/descriptionShoes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This classic SELECTED Crew Neck T-Shirt is the perfect addition to any wardrobe. Crafted from pre-shrunk knitted fabric, this timeless style has a regular fit and short sleeves."
+                        android:layout_below="@id/statusShoes"
+                        android:layout_toRightOf="@id/imgShoes"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_margin="15dp"/>
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/rating"
+                        android:layout_below="@id/descriptionShoes"
+                        android:layout_toRightOf="@id/imgShoes"
+                        android:layout_margin="15dp"
+                        android:scaleType="centerCrop"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".5dp"
+                    android:background="@color/Grey"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+                    <ImageView
+                        android:id="@+id/imgMonitor"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/monitor"/>
+                    <TextView
+                        android:id="@+id/statusMonitor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dilevered on Feb 10"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_toRightOf="@id/imgMonitor"
+                        android:layout_margin="15dp"/>
+
+                    <TextView
+                        android:id="@+id/descriptionMonitor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This classic SELECTED Crew Neck T-Shirt is the perfect addition to any wardrobe. Crafted from pre-shrunk knitted fabric, this timeless style has a regular fit and short sleeves."
+                        android:layout_below="@id/statusMonitor"
+                        android:layout_toRightOf="@id/imgMonitor"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_margin="15dp"/>
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/rating"
+                        android:layout_below="@id/descriptionMonitor"
+                        android:layout_toRightOf="@id/imgMonitor"
+                        android:layout_margin="15dp"
+                        android:scaleType="centerCrop"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".5dp"
+                    android:background="@color/Grey"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+                    <ImageView
+                        android:id="@+id/imgMobile"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/phone"/>
+                    <TextView
+                        android:id="@+id/statusMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dilevered on Jan 15"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:layout_toRightOf="@id/imgMobile"
+                        android:layout_margin="15dp"/>
+
+                    <TextView
+                        android:id="@+id/descriptionMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This classic SELECTED Crew Neck T-Shirt is the perfect addition to any wardrobe. Crafted from pre-shrunk knitted fabric, this timeless style has a regular fit and short sleeves."
+                        android:layout_below="@id/statusMobile"
+                        android:layout_toRightOf="@id/imgMobile"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_margin="15dp"/>
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/rating"
+                        android:layout_below="@id/descriptionMobile"
+                        android:layout_toRightOf="@id/imgMobile"
+                        android:layout_margin="15dp"
+                        android:scaleType="centerCrop"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height=".5dp"
+                    android:background="@color/Grey"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+
+
+
+</FrameLayout>
