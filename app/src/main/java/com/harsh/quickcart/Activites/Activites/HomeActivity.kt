@@ -21,13 +21,6 @@ class HomeActivity : AppCompatActivity() {
 //        enableEdgeToEdge()
         setContentView(R.layout.activity_home)
 
-        var navHome = HomeFragment()
-        var navCart = CartFragment()
-        var navCategories = CategoriesFragment()
-        var navProfile = ProfileFragment()
-
-//        var btnNavHome  = findViewById(R.id.navHome)
-
         frameLayout = findViewById(R.id.frameLayout)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
 

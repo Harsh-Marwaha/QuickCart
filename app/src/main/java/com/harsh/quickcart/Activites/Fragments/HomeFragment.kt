@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.com/")
+            .baseUrl("https://api.escuelajs.co/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)

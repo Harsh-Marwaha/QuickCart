@@ -12,9 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.signupModels.body.AddUserModel
-import com.harsh.quickcart.Activites.Models.signupModels.body.Address
-import com.harsh.quickcart.Activites.Models.signupModels.body.Geolocation
-import com.harsh.quickcart.Activites.Models.signupModels.body.Name
 import com.harsh.quickcart.Activites.Models.signupModels.response.SignUpResponseModel
 //import com.harsh.quickcart.Activites.Apis.Store_Service
 import com.harsh.quickcart.R
@@ -30,15 +27,8 @@ class SignUpActivity : AppCompatActivity() {
 private val TAG =SignUpActivity::class.java.simpleName
     var btnContinueSignUp : Button? = null
     var loadingPB: ProgressBar? = null
-    var edtFirstName : EditText? = null
-    var edtLastName : EditText? = null
-    var edtPhoneNumber : EditText? = null
+    var edtName : EditText? = null
     var edtEmail : EditText? = null
-    var edtUserName : EditText? = null
-    var edtCity : EditText? = null
-    var edtStreet : EditText? = null
-    var edtHouseNumber : EditText? = null
-    var edtZipCode : EditText? = null
     var edtPassword : EditText? = null
     var edtConfirmPassword : EditText? = null
 
@@ -49,21 +39,14 @@ private val TAG =SignUpActivity::class.java.simpleName
 
         btnContinueSignUp = findViewById(R.id.btnContinueSignUp)
         loadingPB = findViewById(R.id.idLoadingPB);
-        edtFirstName = findViewById(R.id.edtFirstName);
-        edtLastName = findViewById(R.id.edtLastName);
-        edtPhoneNumber = findViewById(R.id.edtPhoneNumber);
+        edtName = findViewById(R.id.edtName);
         edtEmail = findViewById(R.id.edtEmail);
-        edtUserName = findViewById(R.id.edtUserName);
-        edtCity = findViewById(R.id.edtCity);
-        edtStreet = findViewById(R.id.edtStreet);
-        edtHouseNumber = findViewById(R.id.edtHouseNumber);
-        edtZipCode = findViewById(R.id.edtZipCode);
         edtPassword = findViewById(R.id.edtPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
 
         btnContinueSignUp?.setOnClickListener() {
 
-            if (edtFirstName?.text.toString().isEmpty() || edtLastName?.text.toString().isEmpty() || edtPhoneNumber?.text.toString().isEmpty() || edtEmail?.text.toString().isEmpty() || edtUserName?.text.toString().isEmpty() || edtPassword?.text.toString().isEmpty() || edtConfirmPassword?.text.toString().isEmpty()){
+            if (edtName?.text.toString().isEmpty() || edtEmail?.text.toString().isEmpty() || edtPassword?.text.toString().isEmpty() || edtConfirmPassword?.text.toString().isEmpty()){
 
                 Toast.makeText(applicationContext,"Please fill all details",Toast.LENGTH_SHORT).show()
 
@@ -71,7 +54,7 @@ private val TAG =SignUpActivity::class.java.simpleName
             else{
                 if (edtPassword?.text.toString()==edtConfirmPassword?.text.toString()){
 
-                    postData(edtFirstName!!.getText().toString(), edtLastName!!.getText().toString(), edtPhoneNumber!!.getText().toString(), edtEmail!!.getText().toString(), edtUserName!!.getText().toString(), edtCity!!.getText().toString(), edtStreet!!.getText().toString(), edtHouseNumber!!.getText().toString(), edtZipCode!!.getText().toString(), edtPassword!!.getText().toString(), edtConfirmPassword!!.getText().toString())
+                    postData(edtName!!.getText().toString(), edtEmail!!.getText().toString(), edtPassword!!.getText().toString())
                 }
 
                 else{
@@ -85,7 +68,7 @@ private val TAG =SignUpActivity::class.java.simpleName
 
     }
 
-    private fun postData(firstName : String, lastName : String, phoneNumber : String, email : String, username: String, city : String, street : String, houseNumber : String, zipCode : String, password : String, confirmPassword : String) {
+    private fun postData(name : String, email : String, password : String) {
 
         loadingPB?.visibility = View.VISIBLE
 
@@ -94,12 +77,7 @@ private val TAG =SignUpActivity::class.java.simpleName
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)
-        val geolocation : Geolocation = Geolocation("","")
-        val id : Int = Random.nextInt(1000000)
-
-        val address = Address(city,geolocation,0,street,zipCode)
-        val name = Name(firstName,lastName)
-        val modal = AddUserModel(address,email,id,name,password,phoneNumber, username)
+        val modal = AddUserModel(null,email,name,password)
         val call: Call<SignUpResponseModel> = retrofitAPI.addUser(modal)
 
         call.enqueue(object : Callback<SignUpResponseModel> {
@@ -108,15 +86,8 @@ private val TAG =SignUpActivity::class.java.simpleName
                 Toast.makeText(applicationContext, "Data added to API", Toast.LENGTH_SHORT).show()
 
                 loadingPB?.visibility = View.GONE
-                edtFirstName?.setText("")
-                edtLastName?.setText("")
-                edtPhoneNumber?.setText("")
+                edtName?.setText("")
                 edtEmail?.setText("")
-                edtUserName?.setText("")
-                edtCity?.setText("")
-                edtStreet?.setText("")
-                edtHouseNumber?.setText("")
-                edtZipCode?.setText("")
                 edtPassword?.setText("")
                 edtConfirmPassword?.setText("")
 

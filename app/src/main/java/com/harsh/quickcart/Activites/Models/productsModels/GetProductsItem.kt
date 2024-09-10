@@ -5,17 +5,15 @@ import com.google.gson.annotations.SerializedName
 
 data class GetProductsItem(
     @SerializedName("category")
-    var category: String?,
+    var category: Category?,
     @SerializedName("description")
     var description: String?,
     @SerializedName("id")
     var id: Int?,
-    @SerializedName("image")
-    var image: String?,
+    @SerializedName("images")
+    var images: List<String?>?,
     @SerializedName("price")
-    var price: Double?,
-    @SerializedName("rating")
-    var rating: Rating?,
+    var price: Int?,
     @SerializedName("title")
     var title: String?
 )

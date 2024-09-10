@@ -1,9 +1,9 @@
-package com.harsh.quickcart.Activites.Models.signupModels.response
+package com.harsh.quickcart.Activites.Models.ProfileModels.response
 
 
 import com.google.gson.annotations.SerializedName
 
-data class SignUpResponseModel(
+data class ProfileResponseModel(
     @SerializedName("avatar")
     var avatar: String?,
     @SerializedName("email")

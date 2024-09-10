@@ -42,7 +42,7 @@ class CartRecViewAdapter : RecyclerView.Adapter<CartRecViewAdapter.ViewHolder> {
             }
         }
         holder.cartProductsPrice.text = "$"+arrProducts?.get(position)?.price.toString()!!
-        Glide.with(context!!).load(arrProducts!![position].image)
+        Glide.with(context!!).load(arrProducts!![position].images)
             .into(holder.cartProductsImage)
     }
 

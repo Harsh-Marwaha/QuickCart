@@ -1,26 +1,40 @@
 package com.harsh.quickcart.Activites.Fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.harsh.quickcart.Activites.Adapters.CategoriesRecViewAdapter
-import com.harsh.quickcart.Activites.Models.CategoriesModel
+import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
+import com.harsh.quickcart.Activites.Apis.StoreService
+import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
+//import com.harsh.quickcart.Activites.Models.productsModels.GetCategories
 import com.harsh.quickcart.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class CategoriesFragment : Fragment() {
 
+    private val TAG = CategoriesFragment::class.java.simpleName
+
     var recViewCategories : RecyclerView? = null
     var categoriesRecViewAdapter : CategoriesRecViewAdapter? = null
-    var arrCategories : ArrayList<CategoriesModel>? = ArrayList()
-    var categories : CategoriesModel? = CategoriesModel()
-    var arrCategoriesImg : ArrayList<String>? = ArrayList()
-    var arrCategoriesTitle : ArrayList<String>? = ArrayList()
+    var loadingPB: ProgressBar? = null
+    var searchView : SearchView? = null
+    private var arrProducts : GetCategories? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,33 +52,53 @@ class CategoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arrCategoriesImg?.add("https://3.imimg.com/data3/TB/KQ/MY-238885/videocon-ha.jpg")
-        arrCategoriesImg?.add("https://www.avtaara.com/wp-content/uploads/2021/01/20210105_163052_0000.png")
-        arrCategoriesImg?.add("https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,q_auto:best,t_productPageHeroGalleryTransformation_v2,w_auto/India%20LOB/Clothing%20and%20Bags/Men's%20Basic%20Cotton%20T-Shirts/IN_Mens-T-Shirts_02")
-        arrCategoriesImg?.add("https://qph.cf2.quoracdn.net/main-qimg-ee3dbe18ad936b8a2b83d84fc1ff3f3e-lq")
-
-        arrCategoriesTitle?.add("Electronics")
-        arrCategoriesTitle?.add("Jewelery")
-        arrCategoriesTitle?.add("Men's clothing")
-        arrCategoriesTitle?.add("Women's clothing")
-
-        setData()
-
         recViewCategories = view.findViewById(R.id.recViewCategories)
-        categoriesRecViewAdapter =  CategoriesRecViewAdapter(context,arrCategories)
-        recViewCategories?.adapter = categoriesRecViewAdapter
-        recViewCategories?.layoutManager = GridLayoutManager(context,2)
+        loadingPB = view.findViewById(R.id.idLoadingPB)
+        searchView = view.findViewById(R.id.searchView)
+
+        GetCategories()
 
     }
 
-    private fun setData()
-    {
-        for (i in arrCategoriesTitle!!.indices)
-        {
-            val cat = CategoriesModel(arrCategoriesTitle?.get(i),arrCategoriesImg?.get(i))
-            arrCategories?.add(cat)
+    private fun GetCategories() {
 
-        }
+        loadingPB?.visibility = View.VISIBLE
+
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.escuelajs.co/api/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val retrofitAPI = retrofit.create(StoreService::class.java)
+
+        val call: Call<GetCategories> = retrofitAPI.getCategories()
+
+        call.enqueue(object : Callback<GetCategories> {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onResponse(call: Call<GetCategories>, response: Response<GetCategories>) {
+
+                if (response!=null){
+                    Log.d(TAG, "GetCategories : onResponse: ${response.body().toString()}")
+                }
+
+                loadingPB?.visibility = View.GONE
+
+                if (response.body() != null){
+                    arrProducts = response.body()
+                    categoriesRecViewAdapter = activity?.let { CategoriesRecViewAdapter(it, arrProducts) }
+                    recViewCategories?.adapter = categoriesRecViewAdapter
+                    recViewCategories?.layoutManager = GridLayoutManager(context,2)
+                    categoriesRecViewAdapter?.notifyDataSetChanged();
+                }
+            }
+
+            override fun onFailure(call: Call<GetCategories>, t: Throwable) {
+
+                Log.d(TAG, "GetCategories : onResponse: ${t.message.toString()}")
+                Toast.makeText(context,"Error found is : ${t.message}", Toast.LENGTH_SHORT).show()
+
+            }
+        })
     }
 
 }

@@ -8,15 +8,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.harsh.quickcart.Activites.Models.CategoriesModel
+import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
 import com.harsh.quickcart.R
 
 class CategoriesRecViewAdapter : RecyclerView.Adapter<CategoriesRecViewAdapter.ViewHolder> {
 
     private var context : Context? = null
-    private var arrCategories : ArrayList<CategoriesModel>? = null
+    private var arrCategories : GetCategories? = null
 
-    constructor(context: Context?, arrCategories: ArrayList<CategoriesModel>?){
+    constructor(context: Context?, arrCategories: GetCategories?){
         this.context=context
         this.arrCategories=arrCategories
     }
@@ -29,7 +29,7 @@ class CategoriesRecViewAdapter : RecyclerView.Adapter<CategoriesRecViewAdapter.V
     }
 
     override fun onBindViewHolder(holder: CategoriesRecViewAdapter.ViewHolder, position: Int) {
-        holder.tvCategories.text = arrCategories?.get(position)?.title.toString()
+        holder.tvCategories.text = arrCategories?.get(position)?.name.toString()
         Glide.with(context!!).load(arrCategories?.get(position)?.image)
             .into(holder.imgViewCategories)
     }

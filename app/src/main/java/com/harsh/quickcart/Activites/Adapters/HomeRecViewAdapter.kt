@@ -1,6 +1,7 @@
 package com.harsh.quickcart.Activites.Adapters
 
 import android.content.Context
+import android.icu.text.Transliterator.Position
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
-import com.harsh.quickcart.Activites.Models.productsModels.GetProductsItem
 import com.harsh.quickcart.R
 
 class HomeRecViewAdapter : RecyclerView.Adapter<HomeRecViewAdapter.ViewHolder> {
@@ -39,7 +39,7 @@ class HomeRecViewAdapter : RecyclerView.Adapter<HomeRecViewAdapter.ViewHolder> {
     override fun onBindViewHolder(holder: HomeRecViewAdapter.ViewHolder, position: Int) {
         holder.productsTitle.text = arrProducts?.get(position)?.title
         holder.productsPrice.text = "$"+arrProducts?.get(position)?.price.toString()!!
-        Glide.with(context!!).load(arrProducts!![position].image)
+        Glide.with(context!!).load(arrProducts!![position].images)
             .into(holder.productsImage)
     }
 
