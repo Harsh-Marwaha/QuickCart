@@ -1,6 +1,7 @@
 package com.harsh.quickcart.Activites.Apis
 
 import android.content.SharedPreferences
+import androidx.browser.trusted.Token
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
 import com.harsh.quickcart.Activites.Models.ProfileModels.body.ProfileModel
 import com.harsh.quickcart.Activites.Models.ProfileModels.response.ProfileResponseModel
@@ -12,6 +13,7 @@ import com.harsh.quickcart.Activites.Models.signupModels.response.SignUpResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -34,7 +36,7 @@ interface StoreService {
     fun login(@Body userLoginModel: UserLoginModel?): Call<LoginResponseModel>
 
     @GET("auth/profile")
-    fun getProfile(): Call<ProfileResponseModel>
+    fun getProfile(@Header("Authorization") authToken: String): Call<ProfileResponseModel>
 
     @GET("products")
     fun getProducts(): Call<GetProducts>

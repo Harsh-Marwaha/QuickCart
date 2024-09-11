@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "67733503218",
+    "project_id": "quick-cart-5bb75",
+    "storage_bucket": "quick-cart-5bb75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67733503218:android:7bdd03735d50042d9ca46b",
+        "android_client_info": {
+          "package_name": "com.harsh.quickcart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67733503218-6ouq40hce0o3sjee8o6adp7umv8rb23i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.harsh.quickcart",
+            "certificate_hash": "2c437854600d0ad8a7bf01359d0ddddf2bbc2708"
+          }
+        },
+        {
+          "client_id": "67733503218-mvpqdqgvu7dluig57k540vuhpenmiild.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-eUtzzXYt1ak_7XaJv4D4DpxEtb1TuSs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67733503218-mvpqdqgvu7dluig57k540vuhpenmiild.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

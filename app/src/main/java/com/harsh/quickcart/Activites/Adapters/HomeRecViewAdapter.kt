@@ -39,7 +39,7 @@ class HomeRecViewAdapter : RecyclerView.Adapter<HomeRecViewAdapter.ViewHolder> {
     override fun onBindViewHolder(holder: HomeRecViewAdapter.ViewHolder, position: Int) {
         holder.productsTitle.text = arrProducts?.get(position)?.title
         holder.productsPrice.text = "$"+arrProducts?.get(position)?.price.toString()!!
-        Glide.with(context!!).load(arrProducts!![position].images)
+        Glide.with(context!!).load(arrProducts!![position].images?.get(0))
             .into(holder.productsImage)
     }
 

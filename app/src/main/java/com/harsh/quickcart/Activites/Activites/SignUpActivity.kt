@@ -73,11 +73,11 @@ private val TAG =SignUpActivity::class.java.simpleName
         loadingPB?.visibility = View.VISIBLE
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.com/")
+            .baseUrl("https://api.escuelajs.co/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)
-        val modal = AddUserModel(null,email,name,password)
+        val modal = AddUserModel("https://femina.wwmindia.com/thumb/content/2016/Jun/thumbnail_1464861339.jpg?width=1200&height=900",email,name,password)
         val call: Call<SignUpResponseModel> = retrofitAPI.addUser(modal)
 
         call.enqueue(object : Callback<SignUpResponseModel> {

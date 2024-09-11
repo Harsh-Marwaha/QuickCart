@@ -10,6 +10,12 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.gson.Gson
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.ProfileModels.body.ProfileModel
@@ -37,6 +43,12 @@ class MainActivity : AppCompatActivity() {
     var loadingPB: ProgressBar? = null
     lateinit var getSharedPreferences : SharedPreferences
 
+    companion object {
+        private const val RC_SIGN_IN = 9001
+    }
+
+    private lateinit var auth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +63,17 @@ class MainActivity : AppCompatActivity() {
         btnSignUp = findViewById(R.id.btnSignUp)
         loadingPB = findViewById(R.id.idLoadingPB)
 
+        auth = FirebaseAuth.getInstance()
+
+//        val currentUser = auth.currentUser
+//
+//        if (currentUser != null) {
+//            // The user is already signed in, navigate to MainActivity
+//            val intent = Intent(this, HomeActivity::class.java)
+//            startActivity(intent)
+//            finish() // finish the current activity to prevent the user from coming back to the SignInActivity using the back button
+//        }
+
         getSharedPreferences=getSharedPreferences("login", MODE_PRIVATE)
 
         var accessToken =getSharedPreferences.getString("accessToken","_")
@@ -62,18 +85,25 @@ class MainActivity : AppCompatActivity() {
         val retrofitAPI = retrofit.create(StoreService::class.java)
 
         val modal = ProfileModel(accessToken)
-        val call: Call<ProfileResponseModel> = retrofitAPI.getProfile()
+        val call: Call<ProfileResponseModel> = retrofitAPI.getProfile("Bearer $accessToken")
+
+        Log.d(TAG, "AccessToken: $accessToken")
 
         call.enqueue(object : Callback<ProfileResponseModel>{
             override fun onResponse(
                 p0: Call<ProfileResponseModel>,
                 p1: Response<ProfileResponseModel>
             ) {
-                Log.d(TAG, "postLogin : onResponse: ${Gson().toJson(p1.body())}")
-                Toast.makeText(applicationContext, "Welcome ${p1.body()?.name}", Toast.LENGTH_SHORT).show()
+                if(p1.body()!=null){
+                    Log.d(TAG, "postLogin : onResponse: ${Gson().toJson(p1.body())}")
+                    Toast.makeText(applicationContext, "Welcome ${p1.body()?.name}", Toast.LENGTH_SHORT).show()
 
-                val intent = Intent(applicationContext,HomeActivity::class.java)
-                startActivity(intent)
+                    val intent = Intent(applicationContext,HomeActivity::class.java)
+                    startActivity(intent)
+                }
+                else{
+                    Toast.makeText(applicationContext,"Invalid Login Credentials",Toast.LENGTH_SHORT).show()
+                }
             }
 
             override fun onFailure(p0: Call<ProfileResponseModel>, p1: Throwable) {
@@ -97,6 +127,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        btnGoogle?.setOnClickListener(){
+            googleSignIn()
+        }
 
     }
 
@@ -148,6 +181,46 @@ class MainActivity : AppCompatActivity() {
 
                 }
             })
+    }
+
+    private fun googleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                Toast.makeText(this, "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    Toast.makeText(this, "Signed in as ${user?.displayName}", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, HomeActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
 
 }

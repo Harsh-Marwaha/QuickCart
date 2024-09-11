@@ -60,7 +60,7 @@ class CartFragment : Fragment() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.com/")
+            .baseUrl("https://api.escuelajs.co/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)
@@ -71,7 +71,7 @@ class CartFragment : Fragment() {
             override fun onResponse(call: Call<GetProducts>, response: Response<GetProducts>) {
 
                 if (response!=null){
-                    Log.d(TAG, "GetCartProducts : onResponse: $response.body().toString()}")
+                    Log.d(TAG, "GetCartProducts : onResponse: ${response.body().toString()}")
                 }
 
                 loadingPB?.visibility = View.GONE
