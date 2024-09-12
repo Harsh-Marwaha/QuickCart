@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 import com.harsh.quickcart.Activites.Activites.MainActivity
 import com.harsh.quickcart.R
 
@@ -22,7 +26,9 @@ class ProfileFragment : Fragment() {
     var btnWishlist : Button? = null
     var btnHelpCenter : Button? = null
     var btnLogOut : Button? = null
+    var tvname : TextView? = null
 
+    private var db = Firebase.firestore
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mAuth: FirebaseAuth
 
@@ -47,6 +53,7 @@ class ProfileFragment : Fragment() {
         btnWishlist = view.findViewById(R.id.btnWishlist)
         btnHelpCenter = view.findViewById(R.id.btnHelpCenter)
         btnLogOut = view.findViewById(R.id.btnLogOut)
+        tvname = view.findViewById(R.id.name)
 
         mAuth = FirebaseAuth.getInstance()
 
@@ -57,6 +64,24 @@ class ProfileFragment : Fragment() {
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
+
+        var auth = FirebaseAuth.getInstance()
+
+        val userId = auth.currentUser?.uid
+
+        if (userId != null){
+            val ref = db.collection("Users").document(userId)
+            ref.get().addOnSuccessListener {
+                if (it!=null){
+                    val name = it.data?.get("name")?.toString()
+                    tvname?.text = "Welcome, "+name
+                }
+            }
+                .addOnFailureListener{
+                    Toast.makeText(requireContext(),"Failed to get user name from database",
+                        Toast.LENGTH_SHORT).show()
+                }
+        }
 
         btnOrders?.setOnClickListener(){
             replaceFragment(OrdersFragment())

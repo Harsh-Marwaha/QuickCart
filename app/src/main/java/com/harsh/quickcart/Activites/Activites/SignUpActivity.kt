@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import com.harsh.quickcart.Activites.Apis.StoreService
@@ -70,7 +71,8 @@ private val TAG =SignUpActivity::class.java.simpleName
                             val userMap = hashMapOf(
                                 "name" to edtName?.text.toString(),
                                 "email" to edtEmail?.text.toString(),
-                                "password" to edtPassword?.text.toString()
+                                "password" to edtPassword?.text.toString(),
+                                "uid" to Firebase.auth.currentUser?.uid
                             )
 
                             val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -85,7 +87,9 @@ private val TAG =SignUpActivity::class.java.simpleName
 
                                     loadingPB?.visibility = View.GONE
 
-                                    val intent = Intent(applicationContext,MainActivity::class.java)
+                                    val intent = Intent(applicationContext, MainActivity::class.java)
+//                                    val intent = Intent(applicationContext,MainActivity::class.java)
+                                    Log.d(TAG, "SignUP : Intent To MainActivity ")
                                     startActivity(intent)
                                     finish()
                                 }.addOnFailureListener{

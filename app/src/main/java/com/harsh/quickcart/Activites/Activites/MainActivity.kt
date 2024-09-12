@@ -247,7 +247,7 @@ class MainActivity : AppCompatActivity() {
                     val userMap = hashMapOf(
                         "name" to user?.displayName.toString(),
                         "email" to user?.email.toString(),
-                        "password" to user?.uid.toString()
+                        "uid" to user?.uid.toString()
                     )
 
                     val userId = FirebaseAuth.getInstance().currentUser?.uid
