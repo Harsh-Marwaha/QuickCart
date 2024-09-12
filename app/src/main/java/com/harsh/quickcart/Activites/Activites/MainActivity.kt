@@ -14,8 +14,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.ProfileModels.body.ProfileModel
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
 
-    var edtUserName : EditText? = null
+    var edtUserEmail : EditText? = null
     var edtPass : EditText? = null
     var btnContinue : Button? = null
     var btnGoogle : Button? = null
@@ -42,12 +44,14 @@ class MainActivity : AppCompatActivity() {
     var btnSignUp : Button? = null
     var loadingPB: ProgressBar? = null
     lateinit var getSharedPreferences : SharedPreferences
+    private var db = Firebase.firestore
 
     companion object {
         private const val RC_SIGN_IN = 9001
     }
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var firebaseAuth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 //        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        edtUserName = findViewById(R.id.edtUserName)
+        edtUserEmail = findViewById(R.id.edtUserEmail)
         edtPass = findViewById(R.id.edtPass)
         btnContinue = findViewById(R.id.btnContinue)
         btnGoogle = findViewById(R.id.btnGoogle)
@@ -65,53 +69,53 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-//        val currentUser = auth.currentUser
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            // The user is already signed in, navigate to MainActivity
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish() // finish the current activity to prevent the user from coming back to the SignInActivity using the back button
+        }
+
+//        getSharedPreferences=getSharedPreferences("login", MODE_PRIVATE)
 //
-//        if (currentUser != null) {
-//            // The user is already signed in, navigate to MainActivity
-//            val intent = Intent(this, HomeActivity::class.java)
-//            startActivity(intent)
-//            finish() // finish the current activity to prevent the user from coming back to the SignInActivity using the back button
-//        }
-
-        getSharedPreferences=getSharedPreferences("login", MODE_PRIVATE)
-
-        var accessToken =getSharedPreferences.getString("accessToken","_")
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.escuelajs.co/api/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val retrofitAPI = retrofit.create(StoreService::class.java)
-
-        val modal = ProfileModel(accessToken)
-        val call: Call<ProfileResponseModel> = retrofitAPI.getProfile("Bearer $accessToken")
-
-        Log.d(TAG, "AccessToken: $accessToken")
-
-        call.enqueue(object : Callback<ProfileResponseModel>{
-            override fun onResponse(
-                p0: Call<ProfileResponseModel>,
-                p1: Response<ProfileResponseModel>
-            ) {
-                if(p1.body()!=null){
-                    Log.d(TAG, "postLogin : onResponse: ${Gson().toJson(p1.body())}")
-                    Toast.makeText(applicationContext, "Welcome ${p1.body()?.name}", Toast.LENGTH_SHORT).show()
-
-                    val intent = Intent(applicationContext,HomeActivity::class.java)
-                    startActivity(intent)
-                }
-                else{
-                    Toast.makeText(applicationContext,"Invalid Login Credentials",Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(p0: Call<ProfileResponseModel>, p1: Throwable) {
-                Log.d(TAG, "postLogin : onResponse: ${p1.message.toString()}")
-                Toast.makeText(applicationContext,"Error found is : ${p1.message}",Toast.LENGTH_SHORT).show()
-            }
-
-        })
+//        var accessToken =getSharedPreferences.getString("accessToken","_")
+//
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://api.escuelajs.co/api/v1/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//        val retrofitAPI = retrofit.create(StoreService::class.java)
+//
+//        val modal = ProfileModel(accessToken)
+//        val call: Call<ProfileResponseModel> = retrofitAPI.getProfile("Bearer $accessToken")
+//
+//        Log.d(TAG, "AccessToken: $accessToken")
+//
+//        call.enqueue(object : Callback<ProfileResponseModel>{
+//            override fun onResponse(
+//                p0: Call<ProfileResponseModel>,
+//                p1: Response<ProfileResponseModel>
+//            ) {
+//                if(p1.body()!=null){
+//                    Log.d(TAG, "postLogin : onResponse: ${Gson().toJson(p1.body())}")
+//                    Toast.makeText(applicationContext, "Welcome ${p1.body()?.name}", Toast.LENGTH_SHORT).show()
+//
+//                    val intent = Intent(applicationContext,HomeActivity::class.java)
+//                    startActivity(intent)
+//                }
+//                else{
+//                    Toast.makeText(applicationContext,"Invalid Login Credentials",Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(p0: Call<ProfileResponseModel>, p1: Throwable) {
+//                Log.d(TAG, "postLogin : onResponse: ${p1.message.toString()}")
+//                Toast.makeText(applicationContext,"Error found is : ${p1.message}",Toast.LENGTH_SHORT).show()
+//            }
+//
+//        })
         
         btnSignUp?.setOnClickListener(){
             val intent = Intent(this,SignUpActivity::class.java)
@@ -119,11 +123,32 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnContinue?.setOnClickListener(){
-            if (edtUserName?.text.toString().isEmpty() || edtPass?.text.toString().isEmpty()){
+            loadingPB?.visibility = View.VISIBLE
+
+            if (edtUserEmail?.text.toString().isEmpty() || edtPass?.text.toString().isEmpty()){
                 Toast.makeText(applicationContext,"Please enter both Username and Password",Toast.LENGTH_SHORT).show()
+                loadingPB?.visibility = View.GONE
             }
             else{
-                postLogin(edtUserName?.text.toString(),edtPass?.text.toString())
+//                postLogin(edtUserEmail?.text.toString(),edtPass?.text.toString())
+                firebaseAuth = FirebaseAuth.getInstance()
+
+                firebaseAuth.signInWithEmailAndPassword(edtUserEmail?.text.toString(),edtPass?.text.toString()).addOnCompleteListener {
+                    if (it.isSuccessful){
+                        loadingPB?.visibility = View.GONE
+                        val intent = Intent(applicationContext,HomeActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                    else{
+                        Toast.makeText(applicationContext,"Log In Failed",Toast.LENGTH_SHORT).show()
+                        loadingPB?.visibility = View.GONE
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(applicationContext,it.message.toString(),Toast.LENGTH_SHORT).show()
+                    loadingPB?.visibility = View.GONE
+                }
+
             }
         }
 
@@ -153,7 +178,7 @@ class MainActivity : AppCompatActivity() {
 
                     loadingPB?.visibility = View.GONE
 
-                    edtUserName?.setText("")
+                    edtUserEmail?.setText("")
                     edtPass?.setText("")
 
                     var accessToken = response.body()?.accessToken.toString()
@@ -171,6 +196,7 @@ class MainActivity : AppCompatActivity() {
 
                     val intent = Intent(applicationContext,HomeActivity::class.java)
                     startActivity(intent)
+                    finish()
 
                 }
 
@@ -184,6 +210,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun googleSignIn() {
+        loadingPB?.visibility = View.VISIBLE
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -214,13 +242,39 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    Toast.makeText(this, "Signed in as ${user?.displayName}", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
-                } else {
-                    Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Signed in as ${user?.displayName}", Toast.LENGTH_SHORT)
+                        .show()
+                    val userMap = hashMapOf(
+                        "name" to user?.displayName.toString(),
+                        "email" to user?.email.toString(),
+                        "password" to user?.uid.toString()
+                    )
+
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+                    if (userId != null) {
+                        db.collection("Users").document(userId).set(userMap)
+                            .addOnSuccessListener {
+//                                    Toast.makeText(applicationContext,"Welcome ${edtName?.text.toString()}",Toast.LENGTH_SHORT).show()
+                            edtUserEmail?.text?.clear()
+                            edtPass?.text?.clear()
+
+                            loadingPB?.visibility = View.GONE
+
+                        }
+                            .addOnFailureListener {
+                            Toast.makeText(applicationContext, "Log In Failed", Toast.LENGTH_SHORT)
+                                .show()
+                            loadingPB?.visibility = View.GONE
+                        }
+                        startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()
+                        loadingPB?.visibility = View.GONE
+                    }
                 }
             }
-    }
 
+    }
 }

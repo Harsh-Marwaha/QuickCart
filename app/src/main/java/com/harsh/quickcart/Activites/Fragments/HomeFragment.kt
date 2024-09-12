@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
@@ -54,8 +55,6 @@ class HomeFragment : Fragment() {
         recViewHome = view.findViewById(R.id.recViewHome)
         loadingPB = view.findViewById(R.id.idLoadingPB)
         searchView = view.findViewById(R.id.searchView)
-
-
 
         getProducts()
 

@@ -22,12 +22,12 @@
    </RelativeLayout>
 
    <EditText
-       android:id="@+id/edtUserName"
+       android:id="@+id/edtUserEmail"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:padding="10dp"
        android:ems="18"
-       android:hint="Enter User Name"
+       android:hint="Enter Email"
        android:inputType="textPersonName"
        android:textColorHint="#949494"
        android:textColor="@color/white"
@@ -47,7 +47,7 @@
        android:textColorHint="#949494"
        android:textColor="@color/white"
        android:background="@drawable/edt_bg"
-       android:layout_below="@id/edtUserName"
+       android:layout_below="@id/edtUserEmail"
        android:layout_marginTop="15dp"
        android:layout_centerHorizontal="true"/>
 
