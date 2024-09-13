@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -27,6 +29,7 @@ class ProfileFragment : Fragment() {
     var btnHelpCenter : Button? = null
     var btnLogOut : Button? = null
     var tvname : TextView? = null
+    var loadingPB: LinearLayout? = null
 
     private var db = Firebase.firestore
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -54,6 +57,9 @@ class ProfileFragment : Fragment() {
         btnHelpCenter = view.findViewById(R.id.btnHelpCenter)
         btnLogOut = view.findViewById(R.id.btnLogOut)
         tvname = view.findViewById(R.id.name)
+        loadingPB = view.findViewById(R.id.idLoadingPB)
+
+        loadingPB?.visibility = View.VISIBLE
 
         mAuth = FirebaseAuth.getInstance()
 
@@ -75,6 +81,7 @@ class ProfileFragment : Fragment() {
                 if (it!=null){
                     val name = it.data?.get("name")?.toString()
                     tvname?.text = "Welcome, "+name
+                    loadingPB?.visibility = View.GONE
                 }
             }
                 .addOnFailureListener{

@@ -1,6 +1,7 @@
 package com.harsh.quickcart.Activites.Fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.harsh.quickcart.Activites.Activites.ItemsHomeActivity
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
@@ -77,16 +79,6 @@ class HomeFragment : Fragment() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<GetProducts>, response: Response<GetProducts>) {
 
-//                var arrProducts : ArrayList<GetProducts>
-//                arrProducts= arrayListOf(response.body()!!)
-                var productsTitle : List<String>
-                var productsPrice : List<Double>
-
-//                arrProducts = listOf(response.body()?.image!!)
-//                productsTitle = listOf(response.body()?.title!!)
-//                productsPrice = listOf(response.body()?.price!!)
-
-
                 if (response!=null){
                     Log.d(TAG, "GetProducts : onResponse: $response.body().toString()}")
                 }
@@ -99,6 +91,19 @@ class HomeFragment : Fragment() {
                     recViewHome?.adapter = homeRecViewAdapter
                     recViewHome?.layoutManager = GridLayoutManager(context,2)
                    homeRecViewAdapter?.notifyDataSetChanged();
+
+                    homeRecViewAdapter?.onItemClickListener(object : HomeRecViewAdapter.onItemClickListener{
+                        override fun onItemClick(position: Int) {
+                            var intent = Intent(context, ItemsHomeActivity::class.java)
+                            intent.putExtra("description",arrProducts?.get(position)?.description)
+                            intent.putExtra("id",arrProducts?.get(position)?.id)
+                            intent.putExtra("images",arrProducts?.get(position)?.category?.image)
+                            intent.putExtra("price",arrProducts?.get(position)?.price)
+                            intent.putExtra("title",arrProducts?.get(position)?.title)
+                            startActivity(intent)
+                        }
+                    })
+
                 }
             }
 
@@ -110,4 +115,11 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
+    fun replaceFragment(fragment : Fragment){
+        val fm = fragmentManager?.beginTransaction()
+        val replace = fm?.replace(R.id.frameLayout,fragment)
+        replace?.commit()
+    }
+
 }

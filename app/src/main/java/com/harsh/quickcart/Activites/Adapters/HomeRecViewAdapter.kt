@@ -17,6 +17,8 @@ class HomeRecViewAdapter : RecyclerView.Adapter<HomeRecViewAdapter.ViewHolder> {
     private var context : Context? = null
     private var arrProducts : GetProducts? = null
 
+    private lateinit var mListener : onItemClickListener
+
     constructor(context: Context, arrProducts:GetProducts?){
         this.context=context
         this.arrProducts=arrProducts
@@ -26,10 +28,17 @@ class HomeRecViewAdapter : RecyclerView.Adapter<HomeRecViewAdapter.ViewHolder> {
         parent: ViewGroup,
         viewType: Int
     ): HomeRecViewAdapter.ViewHolder {
-        return ViewHolder(LayoutInflater.from(context!!).inflate(R.layout.row_home,parent,false))
+        return ViewHolder(LayoutInflater.from(context!!).inflate(R.layout.row_home,parent,false),mListener)
     }
 
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView : View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
+
+        init {
+            itemView.setOnClickListener{
+                listener.onItemClick(adapterPosition)
+            }
+        }
+
         var productsImage = itemView.findViewById<ImageView>(R.id.productsImage)
         var productsTitle = itemView.findViewById<TextView>(R.id.productsTitle)
         var productsPrice = itemView.findViewById<TextView>(R.id.productsPrice)
@@ -46,4 +55,16 @@ class HomeRecViewAdapter : RecyclerView.Adapter<HomeRecViewAdapter.ViewHolder> {
     override fun getItemCount(): Int {
         return arrProducts?.size ?: 0
     }
+
+    interface onItemClickListener{
+
+        fun onItemClick(position: Int)
+
+    }
+
+    fun onItemClickListener(listener: onItemClickListener)
+    {
+        mListener = listener
+    }
+
 }
