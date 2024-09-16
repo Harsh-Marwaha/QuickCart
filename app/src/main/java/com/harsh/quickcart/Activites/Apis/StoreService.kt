@@ -43,4 +43,7 @@ interface StoreService {
 
     @GET("categories")
     fun getCategories(): Call<GetCategories>
+
+//    @GET("categories/1/products")
+//    fun getCategoriesProducts(): Call<GetCategories>
 }

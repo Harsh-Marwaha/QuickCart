@@ -1,24 +1,22 @@
-package com.harsh.quickcart.Activites.Fragments
+package com.harsh.quickcart.Activites.Activites
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.harsh.quickcart.Activites.Activites.ItemsHomeActivity
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
+import com.harsh.quickcart.Activites.Fragments.HomeFragment
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
 import com.harsh.quickcart.R
 import retrofit2.Call
@@ -27,12 +25,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+class ItemsCategoriesActivity : AppCompatActivity() {
 
-class HomeFragment : Fragment() {
+    private val TAG = ItemsCategoriesActivity::class.java.simpleName
 
-    private val TAG = HomeFragment::class.java.simpleName
-
-    var recViewHome : RecyclerView? = null
+    var recViewCategoriesItems : RecyclerView? = null
     var homeRecViewAdapter : HomeRecViewAdapter? = null
     var loadingPB: ProgressBar? = null
     var searchView : SearchView? = null
@@ -40,35 +37,24 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        enableEdgeToEdge()
+        setContentView(R.layout.activity_items_categories2)
 
+        recViewCategoriesItems = findViewById(R.id.recViewCategoriesItems)
+        loadingPB = findViewById(R.id.idLoadingPB)
+        searchView = findViewById(R.id.searchView)
+
+        var  id : Int = intent.getIntExtra("id",0)
+        getProducts(id)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        recViewHome = view.findViewById(R.id.recViewHome)
-        loadingPB = view.findViewById(R.id.idLoadingPB)
-        searchView = view.findViewById(R.id.searchView)
-
-        getProducts()
-
-    }
-
-    private fun getProducts() {
+    private fun getProducts(id : Int) {
 
         loadingPB?.visibility = View.VISIBLE
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.escuelajs.co/api/v1/")
+            .baseUrl("https://api.escuelajs.co/api/v1/categories/$id/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)
@@ -87,14 +73,14 @@ class HomeFragment : Fragment() {
 
                 if (response.body() != null){
                     arrProducts = response.body()
-                    homeRecViewAdapter = activity?.let { HomeRecViewAdapter(it, arrProducts) }
-                    recViewHome?.adapter = homeRecViewAdapter
-                    recViewHome?.layoutManager = GridLayoutManager(context,2)
-                   homeRecViewAdapter?.notifyDataSetChanged();
+                    homeRecViewAdapter =  HomeRecViewAdapter(applicationContext,arrProducts)
+                    recViewCategoriesItems?.adapter = homeRecViewAdapter
+                    recViewCategoriesItems?.layoutManager = GridLayoutManager(applicationContext,2)
+                    homeRecViewAdapter?.notifyDataSetChanged();
 
                     homeRecViewAdapter?.onItemClickListener(object : HomeRecViewAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
-                            var intent = Intent(context, ItemsHomeActivity::class.java)
+                            var intent = Intent(applicationContext, ItemsHomeActivity::class.java)
                             intent.putExtra("description",arrProducts?.get(position)?.description)
                             intent.putExtra("id",arrProducts?.get(position)?.id)
                             intent.putExtra("images",arrProducts?.get(position)?.images?.get(0))
@@ -110,16 +96,9 @@ class HomeFragment : Fragment() {
             override fun onFailure(call: Call<GetProducts>, t: Throwable) {
 
                 Log.d(TAG, "GetProducts : onResponse: ${t.message.toString()}")
-                Toast.makeText(context,"Error found is : ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,"Error found is : ${t.message}", Toast.LENGTH_SHORT).show()
 
             }
         })
     }
-
-    fun replaceFragment(fragment : Fragment){
-        val fm = fragmentManager?.beginTransaction()
-        val replace = fm?.replace(R.id.frameLayout,fragment)
-        replace?.commit()
-    }
-
 }

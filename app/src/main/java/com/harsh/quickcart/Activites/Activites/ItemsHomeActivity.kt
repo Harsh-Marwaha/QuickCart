@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide
 import com.harsh.quickcart.R
 
 class ItemsHomeActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()

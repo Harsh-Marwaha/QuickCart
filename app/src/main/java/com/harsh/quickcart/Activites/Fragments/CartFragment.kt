@@ -81,6 +81,7 @@ class CartFragment : Fragment() {
                     cartRecViewAdapter = activity?.let { CartRecViewAdapter(it, arrProducts) }
                     recViewCart?.adapter = cartRecViewAdapter
                     recViewCart?.layoutManager = LinearLayoutManager(context)
+
                 }
             }
 

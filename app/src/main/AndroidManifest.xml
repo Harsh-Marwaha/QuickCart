@@ -15,6 +15,9 @@
         android:theme="@style/Theme.QuickCart"
         tools:targetApi="31">
         <activity
+            android:name=".Activites.Activites.ItemsCategoriesActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activites.Activites.ItemsHomeActivity"
             android:exported="false" />
         <activity

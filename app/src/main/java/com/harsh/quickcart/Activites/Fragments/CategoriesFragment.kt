@@ -1,6 +1,7 @@
 package com.harsh.quickcart.Activites.Fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,10 +14,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.harsh.quickcart.Activites.Activites.ItemsCategoriesActivity
+import com.harsh.quickcart.Activites.Activites.ItemsHomeActivity
 import com.harsh.quickcart.Activites.Adapters.CategoriesRecViewAdapter
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
+import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
 //import com.harsh.quickcart.Activites.Models.productsModels.GetCategories
 import com.harsh.quickcart.R
 import retrofit2.Call
@@ -32,6 +36,7 @@ class CategoriesFragment : Fragment() {
 
     var recViewCategories : RecyclerView? = null
     var categoriesRecViewAdapter : CategoriesRecViewAdapter? = null
+    var homeRecViewAdapter : HomeRecViewAdapter? = null
     var loadingPB: ProgressBar? = null
     var searchView : SearchView? = null
     private var arrProducts : GetCategories? = null
@@ -89,6 +94,29 @@ class CategoriesFragment : Fragment() {
                     recViewCategories?.adapter = categoriesRecViewAdapter
                     recViewCategories?.layoutManager = GridLayoutManager(context,2)
                     categoriesRecViewAdapter?.notifyDataSetChanged();
+
+                    categoriesRecViewAdapter?.onItemClickListener(object : CategoriesRecViewAdapter.onItemClickListener{
+                        override fun onItemClick(position: Int) {
+
+                            loadingPB?.visibility = View.VISIBLE
+
+                            var intent = Intent(context, ItemsCategoriesActivity::class.java)
+                            intent.putExtra("id",arrProducts?.get(position)?.id)
+
+                            loadingPB?.visibility = View.GONE
+
+                            startActivity(intent)
+                        }
+
+//                            var intent = Intent(context, ItemsHomeActivity::class.java)
+//                            intent.putExtra("description",arrProducts?.get(position)?.description)
+//                            intent.putExtra("id",arrProducts?.get(position)?.id)
+//                            intent.putExtra("images",arrProducts?.get(position)?.images?.get(0))
+//                            intent.putExtra("price",arrProducts?.get(position)?.price)
+//                            intent.putExtra("title",arrProducts?.get(position)?.title)
+//                            startActivity(intent)
+
+                    })
                 }
             }
 
