@@ -53,9 +53,10 @@ class ItemsHomeActivity : AppCompatActivity() {
         var btnAddItem : ImageButton = findViewById(R.id.btnAddItem)
         var btnRemoveItem : ImageButton = findViewById(R.id.btnRemoveItem)
 
-        var arrProducts :  GetProducts? = null
+        var arrProducts :  ArrayList<GetProductsItem>? = null
+        var product :  GetProducts? = null
 
-        var product : GetProducts? = null
+        var count : Int = 1
 
         var db = Firebase.firestore
 
@@ -83,8 +84,8 @@ class ItemsHomeActivity : AppCompatActivity() {
                 }
 
                 if (response.body() != null){
-                    arrProducts = response.body()!!
-//                    product = response.body()
+                    arrProducts = response.body()
+                    product = response.body()
                 }
             }
 
@@ -96,16 +97,17 @@ class ItemsHomeActivity : AppCompatActivity() {
             }
         })
 
-        var count : Int = 0
-
         btnAddItem.setOnClickListener(){
-            val userMap = hashMapOf(
-                "product" to product,
-                "Count" to count,
+            val userMap = mapOf(
+                "uid" to userId,
+                "product id" to id,
+                "count" to count,
+                "product" to arrProducts
             )
 
-            if (userId != null) {
-                db.collection("Cart").document(userId).set(userMap)
+
+            if (id != null) {
+                db.collection("Cart").document(id.toString()).set(userMap)
                     .addOnSuccessListener {
                         Toast.makeText(applicationContext, "Product added to cart successfully", Toast.LENGTH_SHORT)
                             .show()
@@ -116,29 +118,22 @@ class ItemsHomeActivity : AppCompatActivity() {
                     }
             }
 
-            val ref = userId?.let { it1 -> db.collection("Cart").document(it1) }
+            val ref = id?.let { it1 -> db.collection("Users").document(it1.toString()) }
             ref?.get()?.addOnSuccessListener {
 
                 if (it != null){
 
                     val updateUserMap = mapOf(
-                        "id" to arrProducts?.get(0)?.id,
-                        "price" to arrProducts?.get(0)?.price,
-                        "description" to arrProducts?.get(0)?.description,
-                        "title" to arrProducts?.get(0)?.title,
-                        "images" to arrProducts?.get(0)?.images,
-                        "category id" to arrProducts?.get(0)?.category?.id,
-                        "category name" to arrProducts?.get(0)?.category?.name,
-                        "Count" to count++,
+                        "count" to count++,
                     )
 
-                    db.collection("Cart").document(userId).update(updateUserMap)
+                    db.collection("Users").document(id.toString()).update(updateUserMap)
                 }
 
                 else{
                     Log.d(TAG, "set on click listener")
 
-                    db.collection("Cart").document(userId).set(userMap)
+                    db.collection("Cart").document(id.toString()).set(userMap)
                         .addOnSuccessListener {
                             Toast.makeText(applicationContext, "Product added to cart successfully", Toast.LENGTH_SHORT)
                                 .show()
@@ -158,23 +153,28 @@ class ItemsHomeActivity : AppCompatActivity() {
 
         btnRemoveItem.setOnClickListener(){
 
-            val ref = userId?.let { it1 -> db.collection("Cart").document(it1) }
+            val ref = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
             ref?.get()?.addOnSuccessListener {
                 if (it != null){
 
                     var productCount = it.data?.get("Count")
 
                     if(productCount == 1){
-                        db.collection("Cart").document(userId).delete()
+                        val updateUserMap = mapOf(
+                            "count" to count--
+                        )
+
+                        db.collection("Cart").document(id.toString()).update(updateUserMap)
+
+                        db.collection("Cart").document(id.toString()).delete()
                     }
 
                     else{
                         val updateUserMap = mapOf(
-                            "product" to product,
-                            "Count" to count--,
+                            "count" to count--
                         )
 
-                        db.collection("Cart").document(userId).update(updateUserMap)
+                        db.collection("Cart").document(id.toString()).update(updateUserMap)
                     }
 
                 }

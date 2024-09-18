@@ -12,6 +12,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 import com.harsh.quickcart.Activites.Adapters.CartRecViewAdapter
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
@@ -33,6 +36,8 @@ class CartFragment : Fragment() {
     var loadingPB: ProgressBar? = null
     var searchView : SearchView? = null
     private var arrProducts : GetProducts? = null
+    var db = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,7 +56,18 @@ class CartFragment : Fragment() {
         recViewCart = view.findViewById(R.id.recViewCart)
         loadingPB = view.findViewById(R.id.idLoadingPB)
         searchView = view.findViewById(R.id.searchView)
-        getProducts()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+//        getProducts()
+        val ref = db.collection("Cart").get()
+            ?.addOnSuccessListener {
+                var arr = it.documents
+                for (i in arr.indices){
+                    Log.d(TAG, "arr: ${arr.get(i).data}")
+                }
+            }
+            ?.addOnFailureListener(){
+
+            }
     }
 
     private fun getProducts() {
