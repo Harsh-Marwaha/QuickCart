@@ -9,15 +9,14 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.harsh.quickcart.Activites.Adapters.CartRecViewAdapter
-import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
+import com.harsh.quickcart.Activites.Models.CartModels.CartModel
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
 import com.harsh.quickcart.R
 import retrofit2.Call
@@ -37,6 +36,7 @@ class CartFragment : Fragment() {
     var searchView : SearchView? = null
     private var arrProducts : GetProducts? = null
     var db = Firebase.firestore
+    var arrCart : ArrayList<CartModel>? = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +62,12 @@ class CartFragment : Fragment() {
             ?.addOnSuccessListener {
                 var arr = it.documents
                 for (i in arr.indices){
+                    var model = CartModel(uid = arr.get(i).data?.get("uid")?.toString(), product = arr.get(i).data?.get("product"), productId = arr.get(i).data?.get(" product id"), count = arr.get(i).data?.get("count"))
+                    arrCart?.add(model)
                     Log.d(TAG, "arr: ${arr.get(i).data}")
+                    cartRecViewAdapter = activity?.let { CartRecViewAdapter(it, arrCart) }
+                    recViewCart?.adapter = cartRecViewAdapter
+                    recViewCart?.layoutManager = LinearLayoutManager(context)
                 }
             }
             ?.addOnFailureListener(){
@@ -94,7 +99,7 @@ class CartFragment : Fragment() {
 
                 if (response.body() != null){
                     arrProducts = response.body()
-                    cartRecViewAdapter = activity?.let { CartRecViewAdapter(it, arrProducts) }
+                    cartRecViewAdapter = activity?.let { CartRecViewAdapter(it, arrCart) }
                     recViewCart?.adapter = cartRecViewAdapter
                     recViewCart?.layoutManager = LinearLayoutManager(context)
 

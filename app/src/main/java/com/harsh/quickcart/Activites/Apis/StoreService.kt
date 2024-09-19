@@ -3,7 +3,6 @@ package com.harsh.quickcart.Activites.Apis
 import android.content.SharedPreferences
 import androidx.browser.trusted.Token
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
-import com.harsh.quickcart.Activites.Models.ProfileModels.body.ProfileModel
 import com.harsh.quickcart.Activites.Models.ProfileModels.response.ProfileResponseModel
 import com.harsh.quickcart.Activites.Models.loginModels.body.UserLoginModel
 import com.harsh.quickcart.Activites.Models.loginModels.response.LoginResponseModel

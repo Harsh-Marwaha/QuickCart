@@ -31,140 +31,190 @@
                 />
         </LinearLayout>
 
-        <RelativeLayout
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-<!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                android:id="@+id/profilePicture"-->
-<!--                android:layout_width="75dp"-->
-<!--                android:layout_height="75dp"-->
-<!--                android:layout_centerHorizontal="true"-->
-<!--                android:layout_marginTop="25dp"-->
-<!--                android:layout_marginBottom="10dp"-->
-<!--                android:src="@drawable/babu_bisleri"/>-->
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="10dp"/>
-
-<!--            <TextView-->
-<!--                android:id="@+id/name"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text=""-->
-<!--                android:layout_marginLeft="0dp"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textSize="18sp"-->
-<!--                android:layout_centerHorizontal="false"-->
-<!--                android:layout_toRightOf="@id/welcome"-->
-<!--                android:layout_marginTop="15dp"/>-->
-<!--            android:layout_below="@id/profilePicture"-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/number"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="+91 1122334455"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textSize="16sp"-->
-<!--                android:layout_below="@id/name"-->
-<!--                android:layout_centerHorizontal="true"/>-->
-
-            <View
-                android:id="@+id/line"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/Grey"
-                android:layout_below="@id/name"/>
+                android:layout_height="wrap_content"
+                android:elevation="25dp"
+                android:outlineSpotShadowColor="@color/black"
+                android:outlineAmbientShadowColor="@color/black">
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="15dp"/>
 
+            </androidx.cardview.widget.CardView>
+            <!--            <View-->
+            <!--                android:id="@+id/line"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="1dp"-->
+            <!--                android:layout_marginTop="15dp"-->
+            <!--                android:layout_marginBottom="5dp"-->
+            <!--                android:background="@color/Grey"-->
+            <!--                android:layout_below="@id/name"/>-->
 
-            <Button
-                android:id="@+id/btnOrders"
-                android:layout_below="@id/name"
-                android:layout_width="190dp"
-                android:padding="10dp"
-                android:layout_height="45dp"
-                android:text=" Orders"
-                android:textAllCaps="false"
-                android:layout_marginTop="55dp"
-                android:layout_marginLeft="10dp"
-                android:drawableStart="@drawable/resource_package"
-                android:background="@drawable/profile_button_bg"
-                android:drawableTint="@color/Green"/>
-            
-            <Button
-                android:id="@+id/btnCoupons"
-                android:layout_below="@id/btnOrders"
-                android:layout_width="190dp"
-                android:padding="10dp"
-                android:layout_height="45dp"
-                android:text=" Coupons"
-                android:textAllCaps="false"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="25dp"
+                android:layout_marginTop="25dp"
+                android:outlineAmbientShadowColor="@color/black"
+                android:outlineSpotShadowColor="@color/black">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/btnOrders"
+                        android:layout_width="190dp"
+                        android:padding="10dp"
+                        android:layout_height="45dp"
+                        android:text=" Orders"
+                        android:textAllCaps="false"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:drawableStart="@drawable/resource_package"
+                        android:background="@drawable/profile_button_bg"
+                        android:drawableTint="@color/Green"/>
+
+                    <Button
+                        android:id="@+id/btnCoupons"
+                        android:layout_below="@id/btnOrders"
+                        android:layout_width="190dp"
+                        android:padding="10dp"
+                        android:layout_height="45dp"
+                        android:text=" Coupons"
+                        android:textAllCaps="false"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:drawableStart="@drawable/gift"
+                        android:background="@drawable/profile_button_bg"
+                        android:drawableTint="@color/Green"/>
+
+                    <Button
+                        android:id="@+id/btnWishlist"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="190dp"
+                        android:padding="10dp"
+                        android:layout_height="45dp"
+                        android:text=" Wishlist"
+                        android:textAllCaps="false"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:drawableStart="@drawable/heart"
+                        android:background="@drawable/profile_button_bg"
+                        android:drawableTint="@color/Green"/>
+
+                    <Button
+                        android:id="@+id/btnHelpCenter"
+                        android:layout_below="@id/btnWishlist"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="190dp"
+                        android:padding="10dp"
+                        android:layout_height="45dp"
+                        android:text=" Help Center"
+                        android:textAllCaps="false"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:drawableStart="@drawable/center"
+                        android:background="@drawable/profile_button_bg"
+                        android:drawableTint="@color/Green"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="25dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:drawableStart="@drawable/gift"
-                android:background="@drawable/profile_button_bg"
-                android:drawableTint="@color/Green"/>
-            
-            <Button
-                android:id="@+id/btnWishlist"
-                android:layout_below="@id/name"
-                android:layout_alignParentRight="true"
-                android:layout_width="190dp"
                 android:padding="10dp"
-                android:layout_height="45dp"
-                android:text=" Wishlist"
-                android:textAllCaps="false"
-                android:layout_marginTop="55dp"
-                android:layout_marginRight="10dp"
-                android:drawableStart="@drawable/heart"
-                android:background="@drawable/profile_button_bg"
-                android:drawableTint="@color/Green"/>
-            
-            <Button
-                android:id="@+id/btnHelpCenter"
-                android:layout_below="@id/btnWishlist"
-                android:layout_alignParentRight="true"
-                android:layout_width="190dp"
-                android:padding="10dp"
-                android:layout_height="45dp"
-                android:text=" Help Center"
-                android:textAllCaps="false"
+                android:outlineSpotShadowColor="@color/black"
+                android:outlineAmbientShadowColor="@color/black">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Account Settings"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_margin="10dp"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recViewSettings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="25dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:drawableStart="@drawable/center"
-                android:background="@drawable/profile_button_bg"
-                android:drawableTint="@color/Green"/>
+                android:outlineSpotShadowColor="@color/black"
+                android:outlineAmbientShadowColor="@color/black"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="My Activity"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_margin="10dp"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recViewMyActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <Button
                 android:id="@+id/btnLogOut"
                 android:layout_below="@id/btnHelpCenter"
                 android:layout_centerHorizontal="true"
-                android:layout_width="190dp"
+                android:layout_width="match_parent"
                 android:padding="10dp"
                 android:layout_height="45dp"
                 android:text="Log Out"
                 android:textAllCaps="false"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:drawableStart="@drawable/baseline_logout_24"
                 android:background="@drawable/profile_button_bg"
-                android:drawableTint="@color/Green"/>
+                android:drawableTint="@color/Green"
+                android:layout_gravity="center_horizontal"/>
 
-        </RelativeLayout>
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 

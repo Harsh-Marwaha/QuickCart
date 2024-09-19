@@ -11,6 +11,8 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -18,6 +20,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.harsh.quickcart.Activites.Activites.MainActivity
+import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
+import com.harsh.quickcart.Activites.Adapters.ProfileRecViewAdapter
+import com.harsh.quickcart.Activites.Models.ProfileModels.ProfileModel
 import com.harsh.quickcart.R
 
 
@@ -30,6 +35,12 @@ class ProfileFragment : Fragment() {
     var btnLogOut : Button? = null
     var tvname : TextView? = null
     var loadingPB: LinearLayout? = null
+
+    var arrSettings : ArrayList<ProfileModel> = ArrayList()
+    var arrMyActivity : ArrayList<ProfileModel> = ArrayList()
+    var recViewProfile : RecyclerView? = null
+    var recViewMyActivity : RecyclerView? = null
+    var profileRecViewAdapter : ProfileRecViewAdapter? = null
 
     private var db = Firebase.firestore
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -55,9 +66,11 @@ class ProfileFragment : Fragment() {
         btnCoupons = view.findViewById(R.id.btnCoupons)
         btnWishlist = view.findViewById(R.id.btnWishlist)
         btnHelpCenter = view.findViewById(R.id.btnHelpCenter)
-        btnLogOut = view.findViewById(R.id.btnLogOut)
+//        btnLogOut = view.findViewById(R.id.btnLogOut)
         tvname = view.findViewById(R.id.name)
         loadingPB = view.findViewById(R.id.idLoadingPB)
+        recViewProfile = view.findViewById(R.id.recViewSettings)
+        recViewMyActivity = view.findViewById(R.id.recViewMyActivity)
 
         loadingPB?.visibility = View.VISIBLE
 
@@ -116,6 +129,31 @@ class ProfileFragment : Fragment() {
                 activity?.finish()
             }
         }
+
+        var modal = ProfileModel(R.drawable.baseline_person_24,"Edit Profile")
+        arrSettings.add(modal)
+        modal = ProfileModel(R.drawable.wallet,"Saved Credit / Debit & Gift Cards")
+        arrSettings.add(modal)
+        modal = ProfileModel(R.drawable.location,"Saved Addresses")
+        arrSettings.add(modal)
+        modal = ProfileModel(R.drawable.language,"Select Language")
+        arrSettings.add(modal)
+        modal = ProfileModel(R.drawable.notification_settings,"Notification Settings")
+        arrSettings.add(modal)
+
+        modal = ProfileModel(R.drawable.reviews,"Reviews")
+        arrMyActivity.add(modal)
+        modal = ProfileModel(R.drawable.questions,"Questions & Answers")
+        arrMyActivity.add(modal)
+
+        profileRecViewAdapter= ProfileRecViewAdapter(requireContext(),arrSettings)
+        recViewProfile?.adapter = profileRecViewAdapter
+        recViewProfile?.layoutManager = LinearLayoutManager(requireContext())
+
+        profileRecViewAdapter= ProfileRecViewAdapter(requireContext(),arrMyActivity)
+        recViewMyActivity?.adapter = profileRecViewAdapter
+        recViewMyActivity?.layoutManager = LinearLayoutManager(requireContext())
+//        profileRecViewAdapter!!.notifyDataSetChanged()
 
     }
 

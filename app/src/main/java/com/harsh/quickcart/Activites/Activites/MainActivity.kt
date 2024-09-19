@@ -20,7 +20,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import com.harsh.quickcart.Activites.Apis.StoreService
-import com.harsh.quickcart.Activites.Models.ProfileModels.body.ProfileModel
 import com.harsh.quickcart.Activites.Models.ProfileModels.response.ProfileResponseModel
 import com.harsh.quickcart.Activites.Models.loginModels.body.UserLoginModel
 import com.harsh.quickcart.Activites.Models.loginModels.response.LoginResponseModel
