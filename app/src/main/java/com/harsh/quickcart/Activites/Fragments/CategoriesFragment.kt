@@ -20,7 +20,6 @@ import com.harsh.quickcart.Activites.Adapters.CategoriesRecViewAdapter
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
-import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
 //import com.harsh.quickcart.Activites.Models.productsModels.GetCategories
 import com.harsh.quickcart.R
 import retrofit2.Call

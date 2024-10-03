@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.escuelajs.co/api/v1/")
+            .baseUrl("https://fakestoreapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)
@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
                             var intent = Intent(context, ItemsHomeActivity::class.java)
                             intent.putExtra("description",arrProducts?.get(position)?.description)
                             intent.putExtra("id",arrProducts?.get(position)?.id)
-                            intent.putExtra("images",arrProducts?.get(position)?.images?.get(0))
+                            intent.putExtra("images",arrProducts?.get(position)?.image)
                             intent.putExtra("price",arrProducts?.get(position)?.price)
                             intent.putExtra("title",arrProducts?.get(position)?.title)
                             startActivity(intent)

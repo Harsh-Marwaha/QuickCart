@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter.ViewHolder
 import com.harsh.quickcart.Activites.Models.ProfileModels.ProfileModel
-import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
 import com.harsh.quickcart.R
 
 class ProfileRecViewAdapter : RecyclerView.Adapter<ProfileRecViewAdapter.ViewHolder> {
