@@ -1,12 +1,13 @@
 package com.harsh.quickcart.Activites.Apis
 
 import android.content.SharedPreferences
-import androidx.browser.trusted.Token
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
 import com.harsh.quickcart.Activites.Models.ProfileModels.response.ProfileResponseModel
 import com.harsh.quickcart.Activites.Models.loginModels.body.UserLoginModel
 import com.harsh.quickcart.Activites.Models.loginModels.response.LoginResponseModel
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
+import com.harsh.quickcart.Activites.Models.productsModels.GetProductsItem
+import com.harsh.quickcart.Activites.Models.productsModels.GetSingleProduct
 import com.harsh.quickcart.Activites.Models.signupModels.body.AddUserModel
 import com.harsh.quickcart.Activites.Models.signupModels.response.SignUpResponseModel
 import retrofit2.Call
@@ -15,6 +16,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 //import retrofit2.Call
 
@@ -39,6 +41,9 @@ interface StoreService {
 
     @GET("products")
     fun getProducts(): Call<GetProducts>
+
+    @GET("products/{id}")
+    fun getProduct(@Path("id") id: Int): Call<GetSingleProduct>
 
     @GET("categories")
     fun getCategories(): Call<GetCategories>

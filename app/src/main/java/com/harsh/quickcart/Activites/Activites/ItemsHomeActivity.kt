@@ -4,24 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
-import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
 import com.harsh.quickcart.Activites.Models.productsModels.GetProductsItem
+import com.harsh.quickcart.Activites.Models.productsModels.GetSingleProduct
 import com.harsh.quickcart.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,8 +48,7 @@ class ItemsHomeActivity : AppCompatActivity() {
         var btnAddItem : ImageButton = findViewById(R.id.btnAddItem)
         var btnRemoveItem : ImageButton = findViewById(R.id.btnRemoveItem)
 
-        var arrProducts :  ArrayList<GetProductsItem>? = null
-        var product :  GetProducts? = null
+        var product :  GetSingleProduct? = null
 
         var count : Int = 1
 
@@ -68,33 +62,30 @@ class ItemsHomeActivity : AppCompatActivity() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.escuelajs.co/api/v1/categories/$id/")
+            .baseUrl("https://fakestoreapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)
 
-        val call: Call< GetProducts> = retrofitAPI.getProducts()
+        val call: Call<GetSingleProduct> = retrofitAPI.getProduct(id)
 
-        call.enqueue(object : Callback< GetProducts> {
+        call.enqueue(object : Callback<GetSingleProduct> {
             @SuppressLint("NotifyDataSetChanged")
-            override fun onResponse(call: Call< GetProducts>, response: Response< GetProducts>) {
-
-                if (response!=null){
-                    Log.d(TAG, "GetCart : onResponse: $response.body().toString()}")
+            override fun onResponse(p0: Call<GetSingleProduct>, p1: Response<GetSingleProduct>) {
+                if (p1!=null){
+                    Log.d(TAG, "GetCart : onResponse: ${p1.body().toString()}")
                 }
 
-                if (response.body() != null){
-                    arrProducts = response.body()
-                    product = response.body()
+                if (p1.body() != null){
+                    product = p1.body()
                 }
             }
 
-            override fun onFailure(call: Call< GetProducts>, t: Throwable) {
-
-                Log.d(TAG, "GetCart : onResponse: ${t.message.toString()}")
-                Toast.makeText(applicationContext,"Error found is : ${t.message}", Toast.LENGTH_SHORT).show()
-
+            override fun onFailure(p0: Call<GetSingleProduct>, p1: Throwable) {
+                Log.d(TAG, "GetCart : onResponse: ${p1.message.toString()}")
+                Toast.makeText(applicationContext,"Error found is : ${p1.message}", Toast.LENGTH_SHORT).show()
             }
+
         })
 
         btnAddItem.setOnClickListener(){
@@ -102,7 +93,7 @@ class ItemsHomeActivity : AppCompatActivity() {
                 "uid" to userId,
                 "product id" to id,
                 "count" to count,
-                "product" to arrProducts
+                "product" to product
             )
 
 
@@ -183,8 +174,6 @@ class ItemsHomeActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Failed to remove this product from cart", Toast.LENGTH_SHORT)
                     .show()
             }
-
         }
-
     }
 }

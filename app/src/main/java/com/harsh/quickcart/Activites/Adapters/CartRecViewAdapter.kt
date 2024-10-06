@@ -41,7 +41,7 @@ class CartRecViewAdapter : RecyclerView.Adapter<CartRecViewAdapter.ViewHolder> {
 //            }
 //        }
         holder.itemCount.text = arrProducts?.get(position)?.count.toString()
-        holder.cartProductsTitle.text = arrProducts?.get(position)?.product.toString()
+        holder.cartProductsTitle.text = arrProducts?.get(position)?.product?.toString()
 //        holder.cartProductsPrice.text = "$"+arrProducts?.get(position)?.price.toString()!!
 //        Glide.with(context!!).load(arrProducts!![position].images?.get(0))
 //            .into(holder.cartProductsImage)
