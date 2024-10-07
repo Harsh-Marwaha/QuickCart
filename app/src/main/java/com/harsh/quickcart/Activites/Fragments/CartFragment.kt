@@ -58,10 +58,12 @@ class CartFragment : Fragment() {
         recViewCart = view.findViewById(R.id.recViewCart)
         loadingPB = view.findViewById(R.id.idLoadingPB)
         searchView = view.findViewById(R.id.searchView)
+        loadingPB?.visibility=View.VISIBLE
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 //        getProducts()
         val ref = db.collection("Cart").get()
             ?.addOnSuccessListener {
+                loadingPB?.visibility=View.GONE
                 var arr = it.documents
                 for (i in arr.indices){
 
