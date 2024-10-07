@@ -15,8 +15,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
+import com.harsh.quickcart.Activites.Adapters.ItemsCategoryRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Fragments.HomeFragment
+import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
+import com.harsh.quickcart.Activites.Models.CategoriesModels.GetSingleCategory
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
 import com.harsh.quickcart.R
 import retrofit2.Call
@@ -30,10 +33,10 @@ class ItemsCategoriesActivity : AppCompatActivity() {
     private val TAG = ItemsCategoriesActivity::class.java.simpleName
 
     var recViewCategoriesItems : RecyclerView? = null
-    var homeRecViewAdapter : HomeRecViewAdapter? = null
+    var itemsCategoryRecViewAdapter : ItemsCategoryRecViewAdapter? = null
     var loadingPB: ProgressBar? = null
     var searchView : SearchView? = null
-    private var arrProducts : GetProducts? = null
+    private var arrProducts : GetSingleCategory? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,41 +47,41 @@ class ItemsCategoriesActivity : AppCompatActivity() {
         loadingPB = findViewById(R.id.idLoadingPB)
         searchView = findViewById(R.id.searchView)
 
-        var  id : Int = intent.getIntExtra("id",0)
+        var  id : String = intent.getStringExtra("id").toString()
         getProducts(id)
     }
 
-    private fun getProducts(id : Int) {
+    private fun getProducts(id : String) {
 
         loadingPB?.visibility = View.VISIBLE
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.escuelajs.co/api/v1/categories/$id/")
+            .baseUrl("https://fakestoreapi.com/products/category/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)
 
-        val call: Call<GetProducts> = retrofitAPI.getProducts()
+        val call: Call<GetSingleCategory> = retrofitAPI.getSingleCategory(id)
 
-        call.enqueue(object : Callback<GetProducts> {
+        call.enqueue(object : Callback<GetSingleCategory> {
             @SuppressLint("NotifyDataSetChanged")
-            override fun onResponse(call: Call<GetProducts>, response: Response<GetProducts>) {
+            override fun onResponse(call: Call<GetSingleCategory>, response: Response<GetSingleCategory>) {
 
                 if (response!=null){
-                    Log.d(TAG, "GetProducts : onResponse: $response.body().toString()}")
+                    Log.d(TAG, "GetCategory : onResponse: $response.body().toString()}")
                 }
 
                 loadingPB?.visibility = View.GONE
 
                 if (response.body() != null){
                     arrProducts = response.body()
-                    homeRecViewAdapter =  HomeRecViewAdapter(applicationContext,arrProducts)
-                    recViewCategoriesItems?.adapter = homeRecViewAdapter
+                    itemsCategoryRecViewAdapter =  ItemsCategoryRecViewAdapter(applicationContext,arrProducts)
+                    recViewCategoriesItems?.adapter = itemsCategoryRecViewAdapter
                     recViewCategoriesItems?.layoutManager = GridLayoutManager(applicationContext,2)
-                    homeRecViewAdapter?.notifyDataSetChanged();
+                    itemsCategoryRecViewAdapter?.notifyDataSetChanged();
 
-                    homeRecViewAdapter?.onItemClickListener(object : HomeRecViewAdapter.onItemClickListener{
+                    itemsCategoryRecViewAdapter?.onItemClickListener(object : ItemsCategoryRecViewAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
                             var intent = Intent(applicationContext, ItemsHomeActivity::class.java)
                             intent.putExtra("description",arrProducts?.get(position)?.description)
@@ -93,9 +96,9 @@ class ItemsCategoriesActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<GetProducts>, t: Throwable) {
+            override fun onFailure(call: Call<GetSingleCategory>, t: Throwable) {
 
-                Log.d(TAG, "GetProducts : onResponse: ${t.message.toString()}")
+                Log.d(TAG, "GetCategory : onResponse: ${t.message.toString()}")
                 Toast.makeText(applicationContext,"Error found is : ${t.message}", Toast.LENGTH_SHORT).show()
 
             }

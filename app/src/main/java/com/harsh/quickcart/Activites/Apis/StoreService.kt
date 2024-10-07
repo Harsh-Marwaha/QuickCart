@@ -2,6 +2,8 @@ package com.harsh.quickcart.Activites.Apis
 
 import android.content.SharedPreferences
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
+import com.harsh.quickcart.Activites.Models.CategoriesModels.GetSingleCategory
+import com.harsh.quickcart.Activites.Models.CategoriesModels.GetSingleCategoryItem
 import com.harsh.quickcart.Activites.Models.ProfileModels.response.ProfileResponseModel
 import com.harsh.quickcart.Activites.Models.loginModels.body.UserLoginModel
 import com.harsh.quickcart.Activites.Models.loginModels.response.LoginResponseModel
@@ -45,9 +47,14 @@ interface StoreService {
     @GET("products/{id}")
     fun getProduct(@Path("id") id: Int): Call<GetSingleProduct>
 
-    @GET("categories")
+    @GET("products/categories")
     fun getCategories(): Call<GetCategories>
 
+    @GET("{id}")
+    fun getSingleCategory(@Path("id") id: String): Call<GetSingleCategory>
+
+//    @GET("{id}")
+//    fun getSingleCategoryItem(@Path("id") id: String): Call<List<GetSingleCategoryItem>>
 //    @GET("categories/1/products")
 //    fun getCategoriesProducts(): Call<GetCategories>
 }

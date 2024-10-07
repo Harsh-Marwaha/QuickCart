@@ -20,6 +20,7 @@ import com.harsh.quickcart.Activites.Adapters.CategoriesRecViewAdapter
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
+import com.harsh.quickcart.Activites.Models.CategoriesModels.GetSingleCategory
 //import com.harsh.quickcart.Activites.Models.productsModels.GetCategories
 import com.harsh.quickcart.R
 import retrofit2.Call
@@ -35,10 +36,10 @@ class CategoriesFragment : Fragment() {
 
     var recViewCategories : RecyclerView? = null
     var categoriesRecViewAdapter : CategoriesRecViewAdapter? = null
-    var homeRecViewAdapter : HomeRecViewAdapter? = null
     var loadingPB: ProgressBar? = null
     var searchView : SearchView? = null
     private var arrProducts : GetCategories? = null
+//    private var arrGetSingleCategory : GetSingleCategory? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +71,7 @@ class CategoriesFragment : Fragment() {
 
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.escuelajs.co/api/v1/")
+            .baseUrl("https://fakestoreapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitAPI = retrofit.create(StoreService::class.java)
@@ -89,7 +90,7 @@ class CategoriesFragment : Fragment() {
 
                 if (response.body() != null){
                     arrProducts = response.body()
-                    categoriesRecViewAdapter = activity?.let { CategoriesRecViewAdapter(it, arrProducts) }
+                    categoriesRecViewAdapter = CategoriesRecViewAdapter(context,arrProducts)
                     recViewCategories?.adapter = categoriesRecViewAdapter
                     recViewCategories?.layoutManager = GridLayoutManager(context,2)
                     categoriesRecViewAdapter?.notifyDataSetChanged();
@@ -100,21 +101,12 @@ class CategoriesFragment : Fragment() {
                             loadingPB?.visibility = View.VISIBLE
 
                             var intent = Intent(context, ItemsCategoriesActivity::class.java)
-                            intent.putExtra("id",arrProducts?.get(position)?.id)
+                            intent.putExtra("id",arrProducts?.get(position))
 
                             loadingPB?.visibility = View.GONE
 
                             startActivity(intent)
                         }
-
-//                            var intent = Intent(context, ItemsHomeActivity::class.java)
-//                            intent.putExtra("description",arrProducts?.get(position)?.description)
-//                            intent.putExtra("id",arrProducts?.get(position)?.id)
-//                            intent.putExtra("images",arrProducts?.get(position)?.images?.get(0))
-//                            intent.putExtra("price",arrProducts?.get(position)?.price)
-//                            intent.putExtra("title",arrProducts?.get(position)?.title)
-//                            startActivity(intent)
-
                     })
                 }
             }

@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.google.gson.Gson
 import com.harsh.quickcart.Activites.Adapters.CartRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.CartModels.CartModel
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
+import com.harsh.quickcart.Activites.Models.productsModels.GetSingleProduct
 import com.harsh.quickcart.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,9 +64,12 @@ class CartFragment : Fragment() {
             ?.addOnSuccessListener {
                 var arr = it.documents
                 for (i in arr.indices){
-                    var model = CartModel(uid = arr.get(i).data?.get("uid")?.toString(), product = arr.get(i).data?.get("product"), productId = arr.get(i).data?.get(" product id"), count = arr.get(i).data?.get("count"))
+
+                    Log.d(TAG, "arr: ${arr.get(i).data?.get("product")}")
+                    var gson = Gson()
+                    var arrProduct = gson?.fromJson(arr.get(i).data?.get("product").toString(), GetSingleProduct::class.java)
+                    var model = CartModel(uid = arr.get(i).data?.get("uid")?.toString(), product = arrProduct, productId = arr.get(i).data?.get(" product id"), count = arr.get(i).data?.get("count"))
                     arrCart?.add(model)
-                    Log.d(TAG, "arr: ${arr.get(i).data}")
                     cartRecViewAdapter = activity?.let { CartRecViewAdapter(it, arrCart) }
                     recViewCart?.adapter = cartRecViewAdapter
                     recViewCart?.layoutManager = LinearLayoutManager(context)

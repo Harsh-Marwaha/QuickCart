@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.google.gson.Gson
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
 import com.harsh.quickcart.Activites.Models.productsModels.GetProductsItem
@@ -32,6 +33,9 @@ class ItemsHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
         setContentView(R.layout.activity_items_home)
+
+        ///Show Alert
+
 
         var intent : Intent = getIntent()
 
@@ -72,16 +76,19 @@ class ItemsHomeActivity : AppCompatActivity() {
         call.enqueue(object : Callback<GetSingleProduct> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(p0: Call<GetSingleProduct>, p1: Response<GetSingleProduct>) {
+                //Dismiss
                 if (p1!=null){
                     Log.d(TAG, "GetCart : onResponse: ${p1.body().toString()}")
                 }
 
                 if (p1.body() != null){
                     product = p1.body()
+                    Log.d(TAG, "onResponse: DataFound>>>>> ${product?.title}")
                 }
             }
 
             override fun onFailure(p0: Call<GetSingleProduct>, p1: Throwable) {
+                //Dismiss
                 Log.d(TAG, "GetCart : onResponse: ${p1.message.toString()}")
                 Toast.makeText(applicationContext,"Error found is : ${p1.message}", Toast.LENGTH_SHORT).show()
             }
@@ -89,55 +96,75 @@ class ItemsHomeActivity : AppCompatActivity() {
         })
 
         btnAddItem.setOnClickListener(){
-            val userMap = mapOf(
-                "uid" to userId,
-                "product id" to id,
-                "count" to count,
-                "product" to product
-            )
+            if(product != null) {
+                val userMap = mapOf(
+                    "uid" to userId,
+                    "product id" to id,
+                    "count" to count,
+                    "product" to Gson().toJson(product).toString()
+                )
 
 
-            if (id != null) {
-                db.collection("Cart").document(id.toString()).set(userMap)
-                    .addOnSuccessListener {
-                        Toast.makeText(applicationContext, "Product added to cart successfully", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(applicationContext, "Could not add this product to cart", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-            }
-
-            val ref = id?.let { it1 -> db.collection("Users").document(it1.toString()) }
-            ref?.get()?.addOnSuccessListener {
-
-                if (it != null){
-
-                    val updateUserMap = mapOf(
-                        "count" to count++,
-                    )
-
-                    db.collection("Users").document(id.toString()).update(updateUserMap)
-                }
-
-                else{
-                    Log.d(TAG, "set on click listener")
-
+                if (id != null) {
                     db.collection("Cart").document(id.toString()).set(userMap)
                         .addOnSuccessListener {
-                            Toast.makeText(applicationContext, "Product added to cart successfully", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                applicationContext,
+                                "Product added to cart successfully",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
                         .addOnFailureListener {
-                            Toast.makeText(applicationContext, "Could not add this product to cart", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                applicationContext,
+                                "Could not add this product to cart",
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
-
                 }
-            }?.addOnFailureListener{
-                Toast.makeText(applicationContext, "Failed to add this product to cart", Toast.LENGTH_SHORT)
+
+                val ref = id?.let { it1 -> db.collection("Users").document(it1.toString()) }
+                ref?.get()?.addOnSuccessListener {
+
+                    if (it != null) {
+
+                        val updateUserMap = mapOf(
+                            "count" to count++,
+                        )
+
+                        db.collection("Users").document(id.toString()).update(updateUserMap)
+                    } else {
+                        Log.d(TAG, "set on click listener")
+
+                        db.collection("Cart").document(id.toString()).set(userMap)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Product added to cart successfully",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Could not add this product to cart",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+
+                    }
+                }?.addOnFailureListener {
+                    Toast.makeText(applicationContext, "Failed to add this product to cart", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }else{
+                Toast.makeText(applicationContext, "Product loading....," , Toast.LENGTH_SHORT)
                     .show()
+
             }
 
         }
