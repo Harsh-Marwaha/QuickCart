@@ -36,10 +36,10 @@ class CategoriesRecViewAdapter : RecyclerView.Adapter<CategoriesRecViewAdapter.V
 
     private lateinit var mListener : onItemClickListener
 
-    constructor(context: Context?, arrCategories: GetCategories?){
+    constructor(context: Context?, arrCategories: GetCategories?, arrProducts : GetSingleCategory? = null){
         this.context=context
         this.arrCategories=arrCategories
-//        this.arrProducts=arrProducts
+        this.arrProducts=arrProducts
     }
 
     override fun onCreateViewHolder(
@@ -51,39 +51,7 @@ class CategoriesRecViewAdapter : RecyclerView.Adapter<CategoriesRecViewAdapter.V
 
     override fun onBindViewHolder(holder: CategoriesRecViewAdapter.ViewHolder, position: Int) {
         holder.tvCategories.text = arrCategories?.get(position).toString()
-
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://fakestoreapi.com/products/category/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val retrofitAPI = retrofit.create(StoreService::class.java)
-
-        val call: Call<GetSingleCategory> = retrofitAPI.getSingleCategory(arrCategories?.get(position).toString())
-
-        call.enqueue(object : Callback<GetSingleCategory> {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onResponse(call: Call<GetSingleCategory>, response: Response<GetSingleCategory>) {
-
-                if (response!=null){
-                    Log.d(TAG, "GetCategoryImage : onResponse: ${response.body().toString()}")
-                }
-
-                if (response.body() != null){
-                    arrProducts = response.body()
-                }
-            }
-
-            override fun onFailure(call: Call<GetSingleCategory>, t: Throwable) {
-
-                Log.d(TAG, "GetCategoryImage : onResponse: ${t.message.toString()}")
-                Toast.makeText(context,"Error found is : ${t.message}", Toast.LENGTH_SHORT).show()
-
-            }
-        })
-
-        Log.d(TAG, "GetCategoryImages : onResponse: ${arrProducts?.get(0)?.image}")
-
+        Log.d(TAG, "GetCategoryImages : onResponse: ${arrProducts}")
         Glide.with(context!!).load(arrProducts?.get(0)?.image)
             .into(holder.imgViewCategories)
     }

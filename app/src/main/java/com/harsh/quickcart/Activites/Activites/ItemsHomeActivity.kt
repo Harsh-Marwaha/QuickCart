@@ -1,6 +1,7 @@
 package com.harsh.quickcart.Activites.Activites
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
 import com.harsh.quickcart.Activites.Apis.StoreService
-import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
-import com.harsh.quickcart.Activites.Models.productsModels.GetProductsItem
 import com.harsh.quickcart.Activites.Models.productsModels.GetSingleProduct
 import com.harsh.quickcart.R
 import retrofit2.Call
@@ -24,6 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 class ItemsHomeActivity : AppCompatActivity() {
 
@@ -35,6 +35,10 @@ class ItemsHomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_items_home)
 
         ///Show Alert
+        val dialog = ProgressDialog.show(
+            this@ItemsHomeActivity, "",
+            "Loading. Please wait...", true
+        )
 
 
         var intent : Intent = getIntent()
@@ -42,13 +46,16 @@ class ItemsHomeActivity : AppCompatActivity() {
         var  description : String = intent.getStringExtra("description").toString()
         var  id : Int = intent.getIntExtra("id",0)
         var  images : String = intent.getStringExtra("images").toString()
-        var  price : Int? = intent.getIntExtra("price",0)
+        var  price : Double? = intent.getDoubleExtra("price", 0.0)
         var  title : String = intent.getStringExtra("title").toString()
+        var  ratingRate : String = intent.getStringExtra("ratingRate").toString()
+        var  ratingCount : String = intent.getStringExtra("ratingCount").toString()
 
         var ivItemImage : ImageView = findViewById(R.id.ivItemImage)
         var tvItemTitle : TextView = findViewById(R.id.tvItemTitle)
         var tvItemDescription : TextView = findViewById(R.id.tvItemDescription)
         var tvItemPrice : TextView = findViewById(R.id.tvItemPrice)
+        var itemCount : TextView = findViewById(R.id.itemCount)
         var btnAddItem : ImageButton = findViewById(R.id.btnAddItem)
         var btnRemoveItem : ImageButton = findViewById(R.id.btnRemoveItem)
 
@@ -62,6 +69,30 @@ class ItemsHomeActivity : AppCompatActivity() {
         tvItemTitle.text = title
         tvItemDescription.text = description
         tvItemPrice.text = "$"+price.toString()
+//        itemCount.text =
+//            db.collection("Cart").document(id.toString()).get().addOnSuccessListener { if (it.) }.toString()
+
+        var ItemCount = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
+        ItemCount?.get()?.addOnSuccessListener {
+            if (it != null){
+
+                var productCount = it.data?.get("count")
+
+                if(productCount == null){
+                    itemCount.text = "0"
+                }
+
+                else{
+                    itemCount.text = productCount.toString()
+                }
+
+            }
+
+        }?.addOnFailureListener{
+            Toast.makeText(applicationContext, "Failed to remove this product from cart", Toast.LENGTH_SHORT)
+                .show()
+        }
+
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -77,6 +108,7 @@ class ItemsHomeActivity : AppCompatActivity() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(p0: Call<GetSingleProduct>, p1: Response<GetSingleProduct>) {
                 //Dismiss
+                dialog.dismiss();
                 if (p1!=null){
                     Log.d(TAG, "GetCart : onResponse: ${p1.body().toString()}")
                 }
@@ -89,6 +121,7 @@ class ItemsHomeActivity : AppCompatActivity() {
 
             override fun onFailure(p0: Call<GetSingleProduct>, p1: Throwable) {
                 //Dismiss
+                dialog.dismiss();
                 Log.d(TAG, "GetCart : onResponse: ${p1.message.toString()}")
                 Toast.makeText(applicationContext,"Error found is : ${p1.message}", Toast.LENGTH_SHORT).show()
             }
@@ -96,6 +129,7 @@ class ItemsHomeActivity : AppCompatActivity() {
         })
 
         btnAddItem.setOnClickListener(){
+            Toast.makeText(applicationContext,"added", Toast.LENGTH_SHORT).show()
             if(product != null) {
                 val userMap = mapOf(
                     "uid" to userId,
@@ -108,6 +142,23 @@ class ItemsHomeActivity : AppCompatActivity() {
                 if (id != null) {
                     db.collection("Cart").document(id.toString()).set(userMap)
                         .addOnSuccessListener {
+                            var ItemCount = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
+                            ItemCount?.get()?.addOnSuccessListener {
+                                if (it != null){
+
+                                    var productCount = it.data?.get("count")
+
+                                    if(productCount == null){
+                                        itemCount.text = "0"
+                                    }
+
+                                    else{
+                                        itemCount.text = productCount.toString()
+                                    }
+
+                                }
+
+                            }
                             Toast.makeText(
                                 applicationContext,
                                 "Product added to cart successfully",
@@ -125,7 +176,7 @@ class ItemsHomeActivity : AppCompatActivity() {
                         }
                 }
 
-                val ref = id?.let { it1 -> db.collection("Users").document(it1.toString()) }
+                val ref = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
                 ref?.get()?.addOnSuccessListener {
 
                     if (it != null) {
@@ -134,7 +185,7 @@ class ItemsHomeActivity : AppCompatActivity() {
                             "count" to count++,
                         )
 
-                        db.collection("Users").document(id.toString()).update(updateUserMap)
+                        db.collection("Cart").document(id.toString()).update(updateUserMap)
                     } else {
                         Log.d(TAG, "set on click listener")
 
@@ -161,21 +212,16 @@ class ItemsHomeActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Failed to add this product to cart", Toast.LENGTH_SHORT)
                         .show()
                 }
-            }else{
-                Toast.makeText(applicationContext, "Product loading....," , Toast.LENGTH_SHORT)
-                    .show()
-
             }
-
         }
 
         btnRemoveItem.setOnClickListener(){
-
+            Toast.makeText(applicationContext,"removed", Toast.LENGTH_SHORT).show()
             val ref = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
             ref?.get()?.addOnSuccessListener {
                 if (it != null){
 
-                    var productCount = it.data?.get("Count")
+                    var productCount = it.data?.get("count")
 
                     if(productCount == 1){
                         val updateUserMap = mapOf(
@@ -184,6 +230,24 @@ class ItemsHomeActivity : AppCompatActivity() {
 
                         db.collection("Cart").document(id.toString()).update(updateUserMap)
 
+                        var ItemCount = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
+                        ItemCount?.get()?.addOnSuccessListener {
+                            if (it != null){
+
+                                var productCount = it.data?.get("count")
+
+                                if(productCount == null){
+                                    itemCount.text = "0"
+                                }
+
+                                else{
+                                    itemCount.text = productCount.toString()
+                                }
+
+                            }
+
+                        }
+                        Toast.makeText(applicationContext,"deleted", Toast.LENGTH_SHORT).show()
                         db.collection("Cart").document(id.toString()).delete()
                     }
 
@@ -193,6 +257,24 @@ class ItemsHomeActivity : AppCompatActivity() {
                         )
 
                         db.collection("Cart").document(id.toString()).update(updateUserMap)
+
+                        var ItemCount = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
+                        ItemCount?.get()?.addOnSuccessListener {
+                            if (it != null){
+
+                                var productCount = it.data?.get("count")
+
+                                if(productCount == null){
+                                    itemCount.text = "0"
+                                }
+
+                                else{
+                                    itemCount.text = productCount.toString()
+                                }
+
+                            }
+
+                        }
                     }
 
                 }

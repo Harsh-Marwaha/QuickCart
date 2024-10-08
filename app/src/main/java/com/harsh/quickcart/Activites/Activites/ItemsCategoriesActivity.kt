@@ -89,6 +89,8 @@ class ItemsCategoriesActivity : AppCompatActivity() {
                             intent.putExtra("images",arrProducts?.get(position)?.image)
                             intent.putExtra("price",arrProducts?.get(position)?.price)
                             intent.putExtra("title",arrProducts?.get(position)?.title)
+                            intent.putExtra("ratingRate",arrProducts?.get(position)?.rating?.rate)
+                            intent.putExtra("ratingCount",arrProducts?.get(position)?.rating?.count)
                             startActivity(intent)
                         }
                     })

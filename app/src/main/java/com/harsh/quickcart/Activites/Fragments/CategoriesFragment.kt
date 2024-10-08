@@ -39,7 +39,7 @@ class CategoriesFragment : Fragment() {
     var loadingPB: ProgressBar? = null
     var searchView : SearchView? = null
     private var arrProducts : GetCategories? = null
-//    private var arrGetSingleCategory : GetSingleCategory? = null
+    private var arrGetSingleCategory : GetSingleCategory? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +69,6 @@ class CategoriesFragment : Fragment() {
 
         loadingPB?.visibility = View.VISIBLE
 
-
         val retrofit = Retrofit.Builder()
             .baseUrl("https://fakestoreapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -86,11 +85,44 @@ class CategoriesFragment : Fragment() {
                     Log.d(TAG, "GetCategories : onResponse: ${response.body().toString()}")
                 }
 
-                loadingPB?.visibility = View.GONE
+
 
                 if (response.body() != null){
                     arrProducts = response.body()
-                    categoriesRecViewAdapter = CategoriesRecViewAdapter(context,arrProducts)
+
+                    val retrofitImage = Retrofit.Builder()
+                        .baseUrl("https://fakestoreapi.com/products/category/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+                    val retrofitAPIImage = retrofitImage.create(StoreService::class.java)
+
+                    for (i in 0 until arrProducts!!.size){
+                        val callImage: Call<GetSingleCategory> = retrofitAPIImage.getSingleCategory(arrProducts?.get(i).toString())
+
+                        callImage.enqueue(object : Callback<GetSingleCategory> {
+                            @SuppressLint("NotifyDataSetChanged")
+                            override fun onResponse(call: Call<GetSingleCategory>, response: Response<GetSingleCategory>) {
+
+                                if (response!=null){
+                                    Log.d(TAG, "GetCategoryImage : onResponse: ${response.body().toString()}")
+                                }
+
+                                if (response.body() != null){
+                                    arrGetSingleCategory = response.body()
+                                    Log.d(TAG, "GetCategoryImageee : onResponse: ${arrGetSingleCategory}")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<GetSingleCategory>, t: Throwable) {
+
+                                Log.d(TAG, "GetCategoryImage : onResponse: ${t.message.toString()}")
+                                Toast.makeText(context,"Could Not Load Image : ${t.message}", Toast.LENGTH_SHORT).show()
+
+                            }
+                        })
+                    }
+
+                    categoriesRecViewAdapter = CategoriesRecViewAdapter(context,arrProducts,arrGetSingleCategory)
                     recViewCategories?.adapter = categoriesRecViewAdapter
                     recViewCategories?.layoutManager = GridLayoutManager(context,2)
                     categoriesRecViewAdapter?.notifyDataSetChanged();
@@ -109,10 +141,11 @@ class CategoriesFragment : Fragment() {
                         }
                     })
                 }
+                loadingPB?.visibility = View.GONE
             }
 
             override fun onFailure(call: Call<GetCategories>, t: Throwable) {
-
+                loadingPB?.visibility = View.GONE
                 Log.d(TAG, "GetCategories : onResponse: ${t.message.toString()}")
                 Toast.makeText(context,"Error found is : ${t.message}", Toast.LENGTH_SHORT).show()
 
