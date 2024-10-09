@@ -66,7 +66,7 @@ class ProfileFragment : Fragment() {
         btnCoupons = view.findViewById(R.id.btnCoupons)
         btnWishlist = view.findViewById(R.id.btnWishlist)
         btnHelpCenter = view.findViewById(R.id.btnHelpCenter)
-//        btnLogOut = view.findViewById(R.id.btnLogOut)
+        btnLogOut = view.findViewById(R.id.btnLogOut)
         tvname = view.findViewById(R.id.name)
         loadingPB = view.findViewById(R.id.idLoadingPB)
         recViewProfile = view.findViewById(R.id.recViewSettings)

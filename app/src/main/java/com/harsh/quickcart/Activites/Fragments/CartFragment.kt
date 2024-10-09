@@ -1,5 +1,6 @@
 package com.harsh.quickcart.Activites.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,7 +16,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.google.gson.Gson
+import com.harsh.quickcart.Activites.Activites.ItemsHomeActivity
 import com.harsh.quickcart.Activites.Adapters.CartRecViewAdapter
+import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
 import com.harsh.quickcart.Activites.Models.CartModels.CartModel
 import com.harsh.quickcart.Activites.Models.productsModels.GetProducts
@@ -75,6 +78,19 @@ class CartFragment : Fragment() {
                     cartRecViewAdapter = activity?.let { CartRecViewAdapter(it, arrCart) }
                     recViewCart?.adapter = cartRecViewAdapter
                     recViewCart?.layoutManager = LinearLayoutManager(context)
+                    cartRecViewAdapter?.notifyDataSetChanged();
+
+                    cartRecViewAdapter?.onItemClickListener(object : CartRecViewAdapter.onItemClickListener{
+                        override fun onItemClick(position: Int) {
+                            var intent = Intent(context, ItemsHomeActivity::class.java)
+                            intent.putExtra("description",arrCart?.get(position)?.product?.description)
+                            intent.putExtra("id",arrCart?.get(position)?.product?.id)
+                            intent.putExtra("images",arrCart?.get(position)?.product?.image)
+                            intent.putExtra("price",arrCart?.get(position)?.product?.price)
+                            intent.putExtra("title",arrCart?.get(position)?.product?.title)
+                            startActivity(intent)
+                        }
+                    })
                 }
             }
             ?.addOnFailureListener(){
@@ -109,6 +125,7 @@ class CartFragment : Fragment() {
                     cartRecViewAdapter = activity?.let { CartRecViewAdapter(it, arrCart) }
                     recViewCart?.adapter = cartRecViewAdapter
                     recViewCart?.layoutManager = LinearLayoutManager(context)
+
 
                 }
             }

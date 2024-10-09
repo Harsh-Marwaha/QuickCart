@@ -31,15 +31,15 @@ class CategoriesRecViewAdapter : RecyclerView.Adapter<CategoriesRecViewAdapter.V
     private val TAG = CategoriesRecViewAdapter::class.java.simpleName
 
     private var context : Context? = null
-    private var arrCategories : GetCategories? = null
-    private var arrProducts : GetSingleCategory? = null
+    private var arrProducts : GetCategories? = null
+    private var arrCategories : GetSingleCategory? = null
 
     private lateinit var mListener : onItemClickListener
 
-    constructor(context: Context?, arrCategories: GetCategories?, arrProducts : GetSingleCategory? = null){
+    constructor(context: Context?, arrProducts: GetCategories?, arrCategories : GetSingleCategory? = null){
         this.context=context
-        this.arrCategories=arrCategories
         this.arrProducts=arrProducts
+        this.arrCategories=arrCategories
     }
 
     override fun onCreateViewHolder(
@@ -50,14 +50,14 @@ class CategoriesRecViewAdapter : RecyclerView.Adapter<CategoriesRecViewAdapter.V
     }
 
     override fun onBindViewHolder(holder: CategoriesRecViewAdapter.ViewHolder, position: Int) {
-        holder.tvCategories.text = arrCategories?.get(position).toString()
+        holder.tvCategories.text = arrProducts?.get(position).toString()
         Log.d(TAG, "GetCategoryImages : onResponse: ${arrProducts}")
-        Glide.with(context!!).load(arrProducts?.get(0)?.image)
+        Glide.with(context!!).load(arrCategories?.get(0)?.image)
             .into(holder.imgViewCategories)
     }
 
     override fun getItemCount(): Int {
-        return arrCategories!!.size
+        return arrProducts!!.size
     }
 
     class ViewHolder(itemView : View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {

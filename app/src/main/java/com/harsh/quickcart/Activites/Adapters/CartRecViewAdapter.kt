@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter.ViewHolder
+import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter.onItemClickListener
 import com.harsh.quickcart.Activites.Models.CartModels.CartModel
 import com.harsh.quickcart.R
 
@@ -16,16 +18,42 @@ class CartRecViewAdapter : RecyclerView.Adapter<CartRecViewAdapter.ViewHolder> {
     private var context : Context? = null
 
     private var arrProducts : ArrayList<CartModel>? = null
+
+    private lateinit var mListener : onItemClickListener
+
     constructor(context: Context, arrProducts: ArrayList<CartModel>?){
         this.context=context
         this.arrProducts=arrProducts
     }
 
+//    override fun onCreateViewHolder(
+//        parent: ViewGroup,
+//        viewType: Int
+//    ): CartRecViewAdapter.ViewHolder {
+//        return ViewHolder(LayoutInflater.from(context!!).inflate(R.layout.row_cart,parent,false),mListener)
+//    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): CartRecViewAdapter.ViewHolder {
-        return ViewHolder(LayoutInflater.from(context!!).inflate(R.layout.row_cart,parent,false))
+        return ViewHolder(LayoutInflater.from(context!!).inflate(R.layout.row_cart,parent,false),mListener)
+    }
+
+    class ViewHolder(itemView : View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
+
+        init {
+            itemView.setOnClickListener{
+                listener.onItemClick(adapterPosition)
+            }
+        }
+
+        var cartProductsImage = itemView.findViewById<ImageView>(R.id.cartProductsImage)
+        var cartProductsTitle = itemView.findViewById<TextView>(R.id.cartProductsTitle)
+        var cartProductsPrice = itemView.findViewById<TextView>(R.id.cartProductsPrice)
+        var btnAddItem = itemView.findViewById<ImageButton>(R.id.btnAddItem)
+        var btnRemoveItem = itemView.findViewById<ImageButton>(R.id.btnRemoveItem)
+        var itemCount = itemView.findViewById<TextView>(R.id.itemCount)
     }
 
     override fun onBindViewHolder(holder: CartRecViewAdapter.ViewHolder, position: Int) {
@@ -51,12 +79,15 @@ class CartRecViewAdapter : RecyclerView.Adapter<CartRecViewAdapter.ViewHolder> {
         return arrProducts!!.size
     }
 
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        var cartProductsImage = itemView.findViewById<ImageView>(R.id.cartProductsImage)
-        var cartProductsTitle = itemView.findViewById<TextView>(R.id.cartProductsTitle)
-        var cartProductsPrice = itemView.findViewById<TextView>(R.id.cartProductsPrice)
-        var btnAddItem = itemView.findViewById<ImageButton>(R.id.btnAddItem)
-        var btnRemoveItem = itemView.findViewById<ImageButton>(R.id.btnRemoveItem)
-        var itemCount = itemView.findViewById<TextView>(R.id.itemCount)
+
+    interface onItemClickListener{
+
+        fun onItemClick(position: Int)
     }
+
+    fun onItemClickListener(listener: onItemClickListener)
+    {
+        mListener = listener
+    }
+
 }

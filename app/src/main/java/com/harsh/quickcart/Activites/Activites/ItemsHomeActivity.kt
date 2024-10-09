@@ -71,12 +71,12 @@ class ItemsHomeActivity : AppCompatActivity() {
         tvItemPrice.text = "$"+price.toString()
 //        itemCount.text =
 //            db.collection("Cart").document(id.toString()).get().addOnSuccessListener { if (it.) }.toString()
-
+var productCount = "";
         var ItemCount = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
         ItemCount?.get()?.addOnSuccessListener {
             if (it != null){
 
-                var productCount = it.data?.get("count")
+                 productCount = (it.data?.get("count") ?:"").toString()
 
                 if(productCount == null){
                     itemCount.text = "0"
@@ -218,19 +218,44 @@ class ItemsHomeActivity : AppCompatActivity() {
         btnRemoveItem.setOnClickListener(){
             Toast.makeText(applicationContext,"removed", Toast.LENGTH_SHORT).show()
             val ref = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
-            ref?.get()?.addOnSuccessListener {
+
+            if(productCount == "1") {
+                db.collection("Cart").document(id.toString()).delete()
+            }else{
+                val updateUserMap = mapOf(
+                    "count" to count--
+                )
+
+                db.collection("Cart").document(id.toString()).update(updateUserMap)
+
+                var ItemCount = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
+                ItemCount?.get()?.addOnSuccessListener {
+                    if (it != null){
+
+                        var productCount = it.data?.get("count")
+
+                        if(productCount == null){
+                            itemCount.text = "0"
+                        }
+
+                        else{
+                            itemCount.text = productCount.toString()
+                        }
+
+                    }
+
+                }
+            }
+
+           /* ref?.get()?.addOnSuccessListener {
                 if (it != null){
 
                     var productCount = it.data?.get("count")
 
                     if(productCount == 1){
-                        val updateUserMap = mapOf(
-                            "count" to count--
-                        )
 
-                        db.collection("Cart").document(id.toString()).update(updateUserMap)
-
-                        var ItemCount = id?.let { it1 -> db.collection("Cart").document(it1.toString()) }
+                      *//*  db.collection("Cart").document(id.toString())
+                        //var ItemCount = id?.let { it1 -> db.collection("Cart").document(id.toString()) }
                         ItemCount?.get()?.addOnSuccessListener {
                             if (it != null){
 
@@ -246,7 +271,8 @@ class ItemsHomeActivity : AppCompatActivity() {
 
                             }
 
-                        }
+                        }*//*
+                        itemCount.text = "0"
                         Toast.makeText(applicationContext,"deleted", Toast.LENGTH_SHORT).show()
                         db.collection("Cart").document(id.toString()).delete()
                     }
@@ -282,7 +308,7 @@ class ItemsHomeActivity : AppCompatActivity() {
             }?.addOnFailureListener{
                 Toast.makeText(applicationContext, "Failed to remove this product from cart", Toast.LENGTH_SHORT)
                     .show()
-            }
+            }*/
         }
     }
 }

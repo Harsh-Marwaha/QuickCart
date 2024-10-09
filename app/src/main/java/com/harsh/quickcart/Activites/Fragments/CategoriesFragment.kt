@@ -19,6 +19,7 @@ import com.harsh.quickcart.Activites.Activites.ItemsHomeActivity
 import com.harsh.quickcart.Activites.Adapters.CategoriesRecViewAdapter
 import com.harsh.quickcart.Activites.Adapters.HomeRecViewAdapter
 import com.harsh.quickcart.Activites.Apis.StoreService
+import com.harsh.quickcart.Activites.Models.CategoriesModels.CategoriesFragmentModel
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetCategories
 import com.harsh.quickcart.Activites.Models.CategoriesModels.GetSingleCategory
 //import com.harsh.quickcart.Activites.Models.productsModels.GetCategories
@@ -40,6 +41,10 @@ class CategoriesFragment : Fragment() {
     var searchView : SearchView? = null
     private var arrProducts : GetCategories? = null
     private var arrGetSingleCategory : GetSingleCategory? = null
+    private var arrImage : String? = null
+    private var arrname : String? = null
+    var categoriesFragmentModel : CategoriesFragmentModel? = null
+    var arrcategoriesFragmentModel : ArrayList<CategoriesFragmentModel>? = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +114,7 @@ class CategoriesFragment : Fragment() {
 
                                 if (response.body() != null){
                                     arrGetSingleCategory = response.body()
-                                    Log.d(TAG, "GetCategoryImageee : onResponse: ${arrGetSingleCategory}")
+                                    Log.d(TAG, "GetCategoryImageee : onResponse: ${arrGetSingleCategory?.get(0)?.image}")
                                 }
                             }
 
@@ -122,6 +127,16 @@ class CategoriesFragment : Fragment() {
                         })
                     }
 
+//                    if (arrGetSingleCategory!=null){
+//                        for(i in 0 until arrGetSingleCategory!!.size){
+//                            arrname=arrGetSingleCategory?.get(i)?.category
+//                            arrImage=arrGetSingleCategory?.get(i)?.image
+//                            categoriesFragmentModel=CategoriesFragmentModel(arrname,arrImage)
+//                            arrcategoriesFragmentModel?.add(categoriesFragmentModel!!)
+//                        }
+//                    }
+                    categoriesFragmentModel = CategoriesFragmentModel(arrProducts,arrGetSingleCategory)
+                    Log.d(TAG, "parse : onResponse: ${categoriesFragmentModel!!.image?.get(0)}")
                     categoriesRecViewAdapter = CategoriesRecViewAdapter(context,arrProducts,arrGetSingleCategory)
                     recViewCategories?.adapter = categoriesRecViewAdapter
                     recViewCategories?.layoutManager = GridLayoutManager(context,2)
@@ -152,5 +167,4 @@ class CategoriesFragment : Fragment() {
             }
         })
     }
-
 }
